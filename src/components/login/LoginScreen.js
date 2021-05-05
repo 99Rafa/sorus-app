@@ -14,6 +14,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { authLogin } from "src/libs/service/login/loginService";
 
 export default function Login({ navigation }) {
+  
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [hidePass, setHidePass] = useState(true);
@@ -30,7 +31,7 @@ export default function Login({ navigation }) {
     const response = await authLogin(data);
     if (response !== "Error") {
       await AsyncStorage.setItem('authToken', response.token);
-      navigation.navigate("Review");
+      navigation.navigate("Menu");
     } else {
       alert('Usuario o contraseña incorrecta')
     }

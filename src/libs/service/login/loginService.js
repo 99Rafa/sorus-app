@@ -1,5 +1,4 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import getNotificationToken from "src/libs/notificationToken/notificationToken";
 import baseUrl from "src/libs/service/login/baseUrl";
 
 export const authLogin = async (data) => {
@@ -34,10 +33,14 @@ export const authLogout = async () => {
     if (!response.ok) {
       throw new Error()
     }
-    await AsyncStorage.clear()
+    try {
+      await AsyncStorage.clear()
+    } catch(e) {
+      throw new Error()
+    }
     return true
   })
-  .catch(err => {
+  .catch(_ => {
     return false
   })
 }

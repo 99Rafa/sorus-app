@@ -13,7 +13,7 @@ export default StartUpScreen = ({ navigation }) => {
     try { 
       const authToken = await AsyncStorage.getItem('authToken');
       if (authToken !== null) {
-        navigation.navigate("Review");
+        navigation.navigate("Menu");
       } else {
         navigation.navigate("Login");
       }
