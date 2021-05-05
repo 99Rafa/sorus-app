@@ -10,6 +10,8 @@ import {
   TouchableOpacity,
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome5";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { authLogin } from "src/libs/service/login/loginService";
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState("");
@@ -17,8 +19,22 @@ export default function Login({ navigation }) {
   const [hidePass, setHidePass] = useState(true);
 
   useEffect(() => {
-    navigation.setOptions({ title: "", headerShown: false });
+    navigation.setOptions({ headerShown: false });
   }, []);
+
+  login = async () => {
+    const data = {
+      username: email,
+      password
+    }
+    const response = await authLogin(data);
+    if (response !== "Error") {
+      await AsyncStorage.setItem('authToken', response.token);
+      navigation.navigate("Review");
+    } else {
+      alert('Usuario o contraseña incorrecta')
+    }
+  }
 
   return (
     <View style={styles.container}>
@@ -57,7 +73,7 @@ export default function Login({ navigation }) {
       </TouchableOpacity>
 
       {/* Boton inicio de sesion */}
-      <TouchableOpacity style={styles.loginBtn}>
+      <TouchableOpacity style={styles.loginBtn} onPress={login}>
         <Text style={styles.loginText}>Iniciar Sesión</Text>
       </TouchableOpacity>
 
