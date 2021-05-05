@@ -3,27 +3,16 @@ import React from 'react';
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from '@react-navigation/stack';
 import { View, Button } from 'react-native'
+import RegisterProduct from "src/components/registerProduct/registerProduct";
 
 const Stack = createStackNavigator()
-
-function HomeScreen() {
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Button
-        title="Saludar"
-        onPress={() => console.log('hola')}
-      />
-    </View>
-  );
-}
 
 export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        {/* Este es un ejemplo */}
-        <Stack.Screen name="Home" component={HomeScreen} />
-
+        <Stack.Screen name="Subir Oferta" component={RegisterProduct} />
+        
       </Stack.Navigator>
       <StatusBar style="auto" />
     </NavigationContainer>

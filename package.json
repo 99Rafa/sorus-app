@@ -8,10 +8,14 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.35",
+    "@fortawesome/free-solid-svg-icons": "^5.15.3",
+    "@fortawesome/react-native-fontawesome": "^0.2.6",
     "@react-native-community/masked-view": "^0.1.11",
     "@react-navigation/native": "^5.9.4",
     "@react-navigation/stack": "^5.14.4",
     "expo": "~41.0.1",
+    "expo-image-picker": "^10.1.4",
     "expo-status-bar": "~1.0.4",
     "react": "16.13.1",
     "react-dom": "16.13.1",
@@ -20,7 +24,9 @@
     "react-native-reanimated": "^2.1.0",
     "react-native-safe-area-context": "^3.2.0",
     "react-native-screens": "^3.1.1",
-    "react-native-web": "~0.13.12"
+    "react-native-svg": "^12.1.1",
+    "react-native-web": "~0.13.12",
+    "@react-native-community/datetimepicker": "3.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0"
