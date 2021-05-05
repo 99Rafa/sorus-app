@@ -14,7 +14,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { authLogin } from "src/libs/service/login/loginService";
 
 export default function Login({ navigation }) {
-  
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [hidePass, setHidePass] = useState(true);
@@ -32,6 +32,8 @@ export default function Login({ navigation }) {
     if (response !== "Error") {
       await AsyncStorage.setItem('authToken', response.token);
       navigation.navigate("Menu");
+      setPassword("");
+      setEmail("");
     } else {
       alert('Usuario o contraseña incorrecta')
     }
@@ -57,11 +59,11 @@ export default function Login({ navigation }) {
       <View style={styles.inputViewPass}>
         <TextInput
           style={styles.TextInput}
-          placeholder="*****************"
           autoCompleteType="password"
           autoCorrect={false}
           secureTextEntry={hidePass ? true : false}
           onChangeText={(password) => setPassword(password)}
+          value={password}
         />
         <TouchableOpacity onPress={() => setHidePass(!hidePass)}>
           <Icon name={hidePass ? "eye-slash" : "eye"} size={20} color="grey" />
@@ -199,6 +201,7 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     marginLeft: 40,
     marginTop: 20,
+    marginBottom: 5
   },
   textP: {
     alignSelf: "flex-start",
