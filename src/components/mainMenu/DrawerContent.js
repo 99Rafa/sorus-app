@@ -10,8 +10,8 @@ import { authLogout } from "src/libs/service/login/loginService";
 
 export function DrawerContent(props) {
 
-  const logout = () => {
-    if (authLogout()) {
+  const logout = async () => {
+    if (await authLogout()) {
       props.navigation.navigate("Login")
     } else {
       alert('Error when logging out')
