@@ -12,8 +12,8 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator>
 
-        <Stack.Screen name="Review" component={ReviewScreen} />
         <Stack.Screen name="Inicio de Sesión" component={Login} />
+        <Stack.Screen name="Review" component={ReviewScreen} />
 
       </Stack.Navigator>
       <StatusBar style="auto" />
