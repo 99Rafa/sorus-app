@@ -16,7 +16,7 @@ export function DrawerContent(props) {
     } else {
       alert('Error when logging out')
     }
-  }
+  }  
 
   return (
     <View style={{ flex: 1 }}>
@@ -93,7 +93,7 @@ export function DrawerContent(props) {
                 />
               )}
               label="Offers"
-              onPress={() => { }}
+              onPress={() => { props.navigation.navigate('RegisterProduct')}}
             />
 
             <DrawerItem

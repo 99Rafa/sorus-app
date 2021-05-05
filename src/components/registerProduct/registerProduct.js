@@ -4,12 +4,17 @@ import * as ImagePicker from 'expo-image-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faSignature, faMoneyCheckAlt, faFileAlt } from '@fortawesome/free-solid-svg-icons'
+import { register } from 'src/libs/service/registerProducts/registerProductsService';
+import * as FileSystem from 'expo-file-system';
 
 export default function RegisterProduct() {
     const [image, setImage] = useState('src/assets/canasta.png');
     const [date, setDate] = useState(new Date());
     const [mode, setMode] = useState('date');
     const [show, setShow] = useState(false);
+    const [name, setName] = useState("");
+    const [description, setDescription] = useState("");
+    const [price, setPrice] = useState("");
 
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate || date;
@@ -29,6 +34,25 @@ export default function RegisterProduct() {
     const showTimepicker = () => {
         showMode('time');
     };
+
+    registerOffert = async () => {
+        const image64 = await FileSystem.readAsStringAsync(image, { encoding: 'base64' });
+        image64 = 'data:image/png;base64,' + image64;
+        const data = {
+            name: name,
+            description: description,
+            base_price: price,
+            image: image64,
+            start_date: new Date(),
+            end_date: date
+        }
+        const response = await register(data);
+        if (response !== 'Error') {
+            alert('Se ha guardado la oferta')
+        } else {
+            alert('No se pudo registrar la oferta')
+        }
+    }
 
     useEffect(() => {
         (async () => {
@@ -85,23 +109,32 @@ export default function RegisterProduct() {
                     </View>
                     <View style={styles.input}>
                         <FontAwesomeIcon icon={faSignature} size={25} />
-                        <TextInput placeholder='Nombre del Producto' style={{ marginLeft: 10, width: 250}}>
+                        <TextInput
+                            placeholder='Nombre del Producto'
+                            style={{ marginLeft: 10, width: 250 }}
+                            value={name}
+                            onChangeText={setName}>
                         </TextInput>
                     </View>
                     <View style={styles.input2}>
                         <FontAwesomeIcon icon={faFileAlt} size={25} />
-                        <TextInput placeholder='Descripción' style={{ height: 80, textAlignVertical: 'top', width: 250,marginLeft: 10}} multiline>
+                        <TextInput placeholder='Descripción' style={{ height: 80, textAlignVertical: 'top', width: 250, marginLeft: 10 }}
+                            multiline
+                            value={description}
+                            onChangeText={setDescription}>
 
                         </TextInput>
                     </View>
                     <View style={styles.input}>
                         <FontAwesomeIcon icon={faMoneyCheckAlt} size={25} />
-                        <TextInput placeholder='Precio' style={{ marginLeft: 10, width: 250 }}>
+                        <TextInput placeholder='Precio' style={{ marginLeft: 10, width: 250 }}
+                            value={price}
+                            onChangeText={setPrice}>
                             $
                         </TextInput>
                     </View>
                     <View style={styles.content_4} >
-                        <TouchableOpacity style={styles.buttonRegister}>
+                        <TouchableOpacity style={styles.buttonRegister} onPress={registerOffert}>
                             <Text style={styles.colorTextButton}>Registrar</Text>
                         </TouchableOpacity>
                     </View>
