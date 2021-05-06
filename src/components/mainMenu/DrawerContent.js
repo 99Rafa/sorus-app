@@ -8,15 +8,15 @@ import {
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { authLogout } from "src/libs/service/login/loginService";
 
-export function DrawerContent(props) {
+export function DrawerContent({ navigation, ...props }) {
 
   const logout = async () => {
     if (await authLogout()) {
-      props.navigation.navigate("Login")
+      navigation.navigate("Login")
     } else {
       alert('Error when logging out')
     }
-  }  
+  }
 
   return (
     <View style={{ flex: 1 }}>
@@ -93,7 +93,7 @@ export function DrawerContent(props) {
                 />
               )}
               label="Offers"
-              onPress={() => { props.navigation.navigate('RegisterProduct')}}
+              onPress={() => { navigation.navigate('RegisterProduct') }}
             />
 
             <DrawerItem

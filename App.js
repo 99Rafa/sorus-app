@@ -19,7 +19,7 @@ export default function App() {
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Menu" component={MenuStack} />
         <Stack.Screen name="Review" component={ReviewScreen} />
-        <Stack.Screen name="Subir Oferta" component={RegisterProduct} />
+        <Stack.Screen name="RegisterProduct" component={RegisterProduct} />
       
       </Stack.Navigator>
       <StatusBar style="auto" />
