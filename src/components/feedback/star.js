@@ -3,7 +3,7 @@ import { TouchableOpacity } from 'react-native'
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 
-const Star = ({ changeRate }) => {
+export default function Star({ changeRate }) {
 
   const stars = [
     useState("#000"),
@@ -26,11 +26,9 @@ const Star = ({ changeRate }) => {
 
   return (
     stars.map((star, i) => {
-      return <TouchableOpacity style={{paddingLeft: 5}} key={i} onPress={() => setStarsColor(i + 1)}>
+      return <TouchableOpacity style={{ paddingLeft: 5 }} key={i} onPress={() => setStarsColor(i + 1)}>
         <FontAwesomeIcon icon={faStar} color={star[0]} size={25} />
       </TouchableOpacity>
     })
   )
 }
-
-export default Star

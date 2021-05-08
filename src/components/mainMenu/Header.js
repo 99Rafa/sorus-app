@@ -1,132 +1,71 @@
 import React from 'react'
-
-import {
-  StyleSheet,
-  View,
-  Image,
-  SafeAreaView,
-  Text,
-} from 'react-native'
-import Icon from 'react-native-vector-icons/FontAwesome5'
+import { View, Text, StyleSheet, Image } from 'react-native'
 import Animated from 'react-native-reanimated'
+import Icon from 'react-native-vector-icons/FontAwesome5'
 
-const { Value } = Animated
+export default function Header({ scroll_y }) {
 
-class Header extends React.Component {
+  const _scroll_y = scroll_y;
 
-  constructor(props) {
-    super(props)
+  const _diff_clamp_scroll_y = Animated.diffClamp(_scroll_y, 0, 50);
 
-    this._scroll_y = new Value(0)
-  }
+  const _header_height = Animated.interpolateNode(_diff_clamp_scroll_y, {
+    inputRange: [0, 50],
+    outputRange: [50, 0],
+    extrapolate: 'clamp'
+  });
 
-  render() {
+  const _header_transalte_y = Animated.interpolateNode(_diff_clamp_scroll_y, {
+    inputRange: [0, 50],
+    outputRange: [0, -50],
+    extrapolate: 'clamp'
+  });
 
-    const _diff_clamp_scroll_y = Animated.diffClamp(this._scroll_y, 0, 50)
+  const _header_opacity = Animated.interpolateNode(_diff_clamp_scroll_y, {
+    inputRange: [0, 50],
+    outputRange: [1, 0],
+    extrapolate: 'clamp'
+  });
 
-    const _header_height = Animated.interpolateNode(_diff_clamp_scroll_y, {
-      inputRange: [0, 50],
-      outputRange: [50, 0],
-      extrapolate: 'clamp'
-    })
+  return (
+    <Animated.View
+      style={[
+        styles.header, {
+          height: _header_height,
+          transform: [{ translateY: _header_transalte_y }],
+          opacity: _header_opacity
+        }]}
+    >
 
-    const _header_transalte_y = Animated.interpolateNode(_diff_clamp_scroll_y, {
-      inputRange: [0, 50],
-      outputRange: [0, -50],
-      extrapolate: 'clamp'
-    })
+      <Image
+        source={require('src/assets/SORUS_BLACK.png')}
+        style={{ width: 40, height: 50 }}
+      />
 
-    const _header_opacity = Animated.interpolateNode(_diff_clamp_scroll_y, {
-      inputRange: [0, 50],
-      outputRange: [1, 0],
-      extrapolate: 'clamp'
-    })
+      <Text style={{ fontWeight: 'bold', fontSize: 20 }}>sorus</Text>
 
+      <View style={styles.fake_icon_box}>
+        <Icon name="search" size={25} color="#000" />
+      </View>
 
-
-    return (
-      <SafeAreaView style={styles.safe_area_view}>
-
-        <Animated.View
-          style={[
-            styles.header,
-            {
-              height: _header_height,
-              transform: [{ translateY: _header_transalte_y }],
-              opacity: _header_opacity
-            }
-          ]}
-        >
-
-          <Image
-            source={require('src/assets/SORUS_BLACK.png')}
-            style={{ width: 40, height: 50 }}
-          />
-
-          <Text style={{ fontWeight: 'bold', fontSize: 20 }}>SORUS</Text>
-
-          <View style={styles.fake_icon_box}>
-            <Icon name="bell" size={25} color="#000" />
-          </View>
-
-        </Animated.View>
-        <Animated.ScrollView
-          style={[
-            styles.scroll_view,
-            {
-
-            }
-          ]}
-          showsHorizontalScrollIndicator={false}
-          bounces={false}
-          scrollEventThrottle={5}
-          onScroll={Animated.event([
-            {
-              nativeEvent: { contentOffset: { y: this._scroll_y } }
-            }
-          ])}
-        >
-          <View style={[styles.fake_post, { backgroundColor: '#222' }]} />
-          <View style={[styles.fake_post, { backgroundColor: '#333' }]} />
-          <View style={[styles.fake_post, { backgroundColor: '#444' }]} />
-          <View style={[styles.fake_post, { backgroundColor: '#555' }]} />
-          <View style={[styles.fake_post, { backgroundColor: '#666' }]} />
-
-        </Animated.ScrollView>
-      </SafeAreaView>
-    )
-  }
+    </Animated.View>
+  )
 }
 
-export default Header
-
 const styles = StyleSheet.create({
-  safe_area_view: {
-    flex: 1
-  },
   header: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 16,
     marginTop: 30,
   },
   fake_icon_box: {
-    backgroundColor: '#c4e6eb',
     width: 40,
     height: 40,
     borderRadius: 40,
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginLeft: 'auto'
   },
-  scroll_view: {
-    flex: 1
-  },
-  fake_post: {
-    height: 250,
-    marginHorizontal: 16,
-    marginTop: 16,
-    borderRadius: 8
-  }
-})
+});

@@ -8,7 +8,7 @@ import {
 } from 'react-native'
 import Stars from "src/components/feedback/star";
 
-const ReviewScreen = () => {
+export default function ReviewScreen() {
 
   const [title, setTitle] = useState("");
   const [comment, setComment] = useState("");
@@ -110,5 +110,3 @@ const styles = StyleSheet.create({
     marginLeft: 20,
   },
 });
-
-export default ReviewScreen;

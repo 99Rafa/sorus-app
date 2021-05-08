@@ -1,20 +1,17 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Avatar, Title, Caption, Paragraph, Drawer } from 'react-native-paper';
-import {
-  DrawerContentScrollView,
-  DrawerItem
-} from '@react-navigation/drawer';
+import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { authLogout } from "src/libs/service/login/loginService";
 
-export function DrawerContent({ navigation, ...props }) {
+export default function DrawerContent({ navigation, ...props }) {
 
   const logout = async () => {
     if (await authLogout()) {
-      navigation.navigate("Login")
+      navigation.navigate("Login");
     } else {
-      alert('Error when logging out')
+      alert('Error when logging out');
     }
   }
 
@@ -172,5 +169,4 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 16,
   },
-
 });

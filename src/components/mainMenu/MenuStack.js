@@ -1,24 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer'
-
-import Header from 'src/components/mainMenu/Header'
-import { DrawerContent } from 'src/components/mainMenu/DrawerContent';
+import Body from 'src/components/mainMenu/Body'
+import DrawerContent from 'src/components/mainMenu/DrawerContent';
 
 const Drawer = createDrawerNavigator();
 
-class MenuStack extends React.Component {
+export default function MenuStack({ navigation }) {
 
-  componentDidMount(){
-    this.props.navigation.setOptions({headerShown: false})
-  }
+  useEffect(() => {
+    navigation.setOptions({ headerShown: false });
+  }, [])
 
-  render() {
-    return <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />}>
-      <Drawer.Screen name="Home" component={Header} />
-    </Drawer.Navigator>
-
-
-  }
+  return <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />}>
+    <Drawer.Screen name="Home" component={Body} />
+  </Drawer.Navigator>
 }
-
-export default MenuStack;

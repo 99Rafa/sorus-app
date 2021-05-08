@@ -35,7 +35,7 @@ export default function Login({ navigation }) {
       setPassword("");
       setEmail("");
     } else {
-      alert('Usuario o contraseña incorrecta')
+      alert('Usuario o contraseña incorrecta');
     }
   }
 

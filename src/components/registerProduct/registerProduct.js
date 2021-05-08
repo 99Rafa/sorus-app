@@ -48,9 +48,9 @@ export default function RegisterProduct() {
     }
     const response = await register(data);
     if (response !== 'Error') {
-      alert('Se ha guardado la oferta')
+      alert('Se ha guardado la oferta');
     } else {
-      alert('No se pudo registrar la oferta')
+      alert('No se pudo registrar la oferta');
     }
   }
 
@@ -273,4 +273,4 @@ const styles = StyleSheet.create({
   colorTextButton: {
     color: '#fff'
   }
-})
+});
