@@ -1,9 +1,9 @@
-import React from 'react'
-import { View, Text, StyleSheet, Image } from 'react-native'
-import Animated from 'react-native-reanimated'
-import Icon from 'react-native-vector-icons/FontAwesome5'
+import React from 'react';
+import { Text, StyleSheet, Image } from 'react-native';
+import Animated from 'react-native-reanimated';
+import SearchBar from "src/components/mainMenu/SearchBar";
 
-export default function Header({ scroll_y }) {
+export default function Header({ scroll_y, setQuery }) {
 
   const _scroll_y = scroll_y;
 
@@ -42,11 +42,9 @@ export default function Header({ scroll_y }) {
         style={{ width: 40, height: 50 }}
       />
 
-      <Text style={{ fontWeight: 'bold', fontSize: 20 }}>sorus</Text>
+      <Text style={styles.title}>SORUS</Text>
 
-      <View style={styles.fake_icon_box}>
-        <Icon name="search" size={25} color="#000" />
-      </View>
+      <SearchBar setQuery={setQuery} />
 
     </Animated.View>
   )
@@ -68,4 +66,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginLeft: 'auto'
   },
+  title: {
+    fontSize: 20,
+    marginTop: 4,
+    marginLeft: 4,
+    fontFamily: "PoppinsBold"
+  }
 });

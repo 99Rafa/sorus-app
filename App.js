@@ -2,6 +2,7 @@ import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from '@react-navigation/stack';
+import { useFonts } from 'expo-font';
 import ReviewScreen from "src/components/feedback/feedback";
 import Login from "src/components/login/LoginScreen";
 import StartUpScreen from "src/components/login/StartUpScreen";
@@ -11,6 +12,16 @@ import RegisterProduct from "src/components/registerProduct/registerProduct";
 const Stack = createStackNavigator()
 
 export default function App() {
+
+  const [loaded] = useFonts({
+    Poppins: require('src/assets/fonts/Poppins-Regular.ttf'),
+    PoppinsBold: require('src/assets/fonts/Poppins-Bold.ttf'),
+  });
+
+  if (!loaded) {
+    return null;
+  }
+
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -20,7 +31,7 @@ export default function App() {
         <Stack.Screen name="Menu" component={MenuStack} />
         <Stack.Screen name="Review" component={ReviewScreen} />
         <Stack.Screen name="RegisterProduct" component={RegisterProduct} />
-      
+
       </Stack.Navigator>
       <StatusBar style="auto" />
     </NavigationContainer>
