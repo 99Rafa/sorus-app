@@ -66,7 +66,7 @@ export default function DrawerContent({ navigation, ...props }) {
                 />
               )}
               label="Profile"
-              onPress={() => { }}
+              onPress={() => { navigation.navigate("Profile")}}
             />
 
             <DrawerItem
