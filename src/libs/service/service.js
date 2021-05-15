@@ -4,10 +4,10 @@ import baseUrl from "src/libs/service/utils/baseUrl";
 class service {
   static instance = new service()
 
-  makeRequest = ({ url, body, timeout = 500 }) => {
+  makeRequest = ({ url, body, timeout = 2000 }) => {
     return new Promise((resolve, reject) => {
       let timer = setTimeout(() => {
-        reject({ error: 'Request timed out' })
+        reject('Request timed out')
       }, timeout);
 
       fetch(`${baseUrl}${url}`, body).then(
@@ -15,9 +15,9 @@ class service {
           if (response.ok) {
             resolve(response.json())
           }
-          reject({ error: `The server returned ${response.status} status code` })
+          reject(`The server returned status code ${response.status}`)
         },
-        err => reject({ error: err })
+        err => reject(err)
       )
         .finally(() => clearTimeout(timer));
     })
@@ -37,12 +37,8 @@ class service {
         }
       }
       return await this.makeRequest({ body, ...args })
-        .then(
-          data => data,
-          err => err
-        )
     } catch (error) {
-      return new Promise((_, reject) => reject({ error: error }))
+      return new Promise((_, reject) => reject(error))
     }
   }
 

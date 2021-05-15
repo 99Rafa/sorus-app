@@ -4,8 +4,8 @@ import * as ImagePicker from 'expo-image-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faSignature, faMoneyCheckAlt, faFileAlt } from '@fortawesome/free-solid-svg-icons'
-import { register } from 'src/libs/service/registerProducts/registerProductsService';
 import * as FileSystem from 'expo-file-system';
+import service from 'src/libs/service/service';
 
 export default function RegisterProduct() {
   const [image, setImage] = useState('src/assets/canasta.png');
@@ -46,12 +46,14 @@ export default function RegisterProduct() {
       start_date: new Date(),
       end_date: date
     }
-    const response = await register(data);
-    if (response !== 'Error') {
-      alert('Se ha guardado la oferta');
-    } else {
-      alert('No se pudo registrar la oferta');
-    }
+    service.post('offers/product/register/', data)
+      .then(_ => {
+        alert('Se ha guardado la oferta')
+      })
+      .catch(err => {
+        alert('Error al guardar la oferta')
+        console.log(err)
+      })
   }
 
   useEffect(() => {

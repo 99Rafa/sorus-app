@@ -3,16 +3,21 @@ import { View, StyleSheet } from 'react-native';
 import { Avatar, Title, Caption, Paragraph, Drawer } from 'react-native-paper';
 import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-import { authLogout } from "src/libs/service/login/loginService";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import service from 'src/libs/service/service'
 
 export default function DrawerContent({ navigation, ...props }) {
 
-  const logout = async () => {
-    if (await authLogout()) {
-      navigation.navigate("Login");
-    } else {
-      alert('Error when logging out');
-    }
+  const logout = () => {
+    service.post('users/logout/')
+      .then(async _ => {
+        await AsyncStorage.clear()
+        navigation.navigate("Login")
+      })
+      .catch(err => {
+        alert('Error al iniciar sesión')
+        console.log(err)
+      })
   }
 
   return (
@@ -66,7 +71,7 @@ export default function DrawerContent({ navigation, ...props }) {
                 />
               )}
               label="Profile"
-              onPress={() => { navigation.navigate("Profile")}}
+              onPress={() => { navigation.navigate("Profile") }}
             />
 
             <DrawerItem

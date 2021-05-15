@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, Image, TextInput } from 'react-native'
 import * as ImagePicker from 'expo-image-picker';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-import { updateProfile } from 'src/libs/service/profile/updateProfileService';
 import * as FileSystem from 'expo-file-system';
+import service from 'src/libs/service/service'
 
 export default function profle({ navigation }) {
   const [image, setImage] = useState('src/assets/canasta.png');
@@ -34,14 +34,15 @@ export default function profle({ navigation }) {
       last_name,
       email,
       profile_image: image64,
-      password
     }
-    const response = await updateProfile(data);
-    if (response !== 'Error') {
-      alert('Se han actualizado los datos');
-    } else {
-      alert('No se pudo actualizar los datos');
-    }
+    service.post('users/profile/update/', data)
+      .then(_ => {
+        alert('Se han actualizado los datos')
+      })
+      .catch(err => {
+        alert('No se pudo actualizar los datos')
+        console.log(err)
+      })
   }
 
   const BackButtonClick = () => {

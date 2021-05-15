@@ -22,7 +22,7 @@ export default function Login({ navigation }) {
     navigation.setOptions({ headerShown: false });
   }, []);
 
-  login = async () => {
+  login = () => {
     const data = {
       username: email,
       password
@@ -34,8 +34,9 @@ export default function Login({ navigation }) {
         setEmail("");
         setPassword("");
       })
-      .catch(_ => {
+      .catch(err => {
         alert('Usuario o contraseña incorrecta')
+        console.log(err)
       });
   }
 

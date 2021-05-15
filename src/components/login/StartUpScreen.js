@@ -1,26 +1,23 @@
 import React, { useEffect } from 'react'
 import { View } from 'react-native'
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import service from 'src/libs/service/service'
 
 export default function StartUpScreen({ navigation }) {
 
   useEffect(() => {
     navigation.setOptions({ headerShown: false });
-    getAuthToken();
+    authenticateUser();
   }, []);
 
-  getAuthToken = async () => {
-    try {
-      const authToken = await AsyncStorage.getItem('authToken');
-      if (authToken !== null) {
-        navigation.navigate("Menu");
-      } else {
-        navigation.navigate("Login");
-      }
-    } catch (e) {
-      alert(`AsyncStorage error: ${e}`);
-      navigation.navigate("Login");
-    }
+  authenticateUser = async () => {
+    await service.get('users/is_authenticated/')
+      .then(_ => {
+        navigation.navigate('Menu')
+      })
+      .catch(err => {
+        navigation.navigate('Login')
+        console.log(err)
+      })
   }
 
   return (
