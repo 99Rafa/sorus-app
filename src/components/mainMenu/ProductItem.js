@@ -1,10 +1,15 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native'
 import secsToTime from "src/libs/time/secsToTime";
 
 export default function ProductItem({ item, handlePress }) {
 
-  const [timeLeft, setTimeLeft] = useState(secsToTime(item.time_left))
+  const [timeLeft, setTimeLeft] = useState('')
+
+  useEffect(() => {
+    const { days, hours, minutes, seconds } = secsToTime(item.time_left)
+    setTimeLeft(`${days}:${hours}:${minutes}:${seconds}`)
+  }, [])
 
   return (
     <TouchableOpacity
@@ -19,7 +24,7 @@ export default function ProductItem({ item, handlePress }) {
         </View>
         <Image
           source={{ uri: item.image }}
-          style={{ width: 80, height: 80, marginLeft: 'auto' }}
+          style={{ width: 80, height: 80, marginLeft: 'auto', borderRadius: 8 }}
         />
       </>
     </TouchableOpacity>
