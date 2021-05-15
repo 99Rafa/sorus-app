@@ -6,12 +6,11 @@ import {
   View,
   Image,
   TextInput,
-  Button,
   TouchableOpacity,
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { authLogin } from "src/libs/service/login/loginService";
+import service from "src/libs/service/service";
 
 export default function Login({ navigation }) {
 
@@ -28,15 +27,16 @@ export default function Login({ navigation }) {
       username: email,
       password
     }
-    const response = await authLogin(data);
-    if (response !== "Error") {
-      await AsyncStorage.setItem('authToken', response.token);
-      navigation.navigate("Menu");
-      setPassword("");
-      setEmail("");
-    } else {
-      alert('Usuario o contraseña incorrecta');
-    }
+    service.post('users/login/', data)
+      .then(async response => {
+        await AsyncStorage.setItem('authToken', response.token);
+        navigation.navigate("Menu");
+        setEmail("");
+        setPassword("");
+      })
+      .catch(_ => {
+        alert('Usuario o contraseña incorrecta')
+      });
   }
 
   return (

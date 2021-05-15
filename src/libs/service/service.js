@@ -7,12 +7,17 @@ class service {
   makeRequest = ({ url, body, timeout = 500 }) => {
     return new Promise((resolve, reject) => {
       let timer = setTimeout(() => {
-        reject(new Error("Request timed out"))
+        reject({ error: 'Request timed out' })
       }, timeout);
 
       fetch(`${baseUrl}${url}`, body).then(
-        response => resolve(response.json()),
-        err => reject(err)
+        response => {
+          if (response.ok) {
+            resolve(response.json())
+          }
+          reject({ error: `The server returned ${response.status} status code` })
+        },
+        err => reject({ error: err })
       )
         .finally(() => clearTimeout(timer));
     })
@@ -21,26 +26,35 @@ class service {
   addHeaders = async ({ body, ...args }) => {
     try {
       const token = await AsyncStorage.getItem('authToken')
-      body.headers = {
-        'Content-Type': 'application/json',
-        'Authorization': `Token ${token}`
+      if (token !== null) {
+        body.headers = {
+          'Content-Type': 'application/json',
+          'Authorization': `Token ${token}`
+        }
+      } else {
+        body.headers = {
+          'Content-Type': 'application/json',
+        }
       }
       return await this.makeRequest({ body, ...args })
+        .then(
+          data => data,
+          err => err
+        )
     } catch (error) {
-      return new Promise((_, reject) => reject({ detail: error }))
+      return new Promise((_, reject) => reject({ error: error }))
     }
   }
 
   get = async (url, ...args) => {
-    body = {
+    const body = {
       method: 'GET',
-      body: JSON.stringify(data)
     }
     return await this.addHeaders({ url, body, ...args })
   }
 
   post = async (url, data, ...args) => {
-    body = {
+    const body = {
       method: 'POST',
       body: JSON.stringify(data)
     }
@@ -48,7 +62,7 @@ class service {
   }
 
   patch = async (url, data, ...args) => {
-    body = {
+    const body = {
       method: 'PATCH',
       body: JSON.stringify(data)
     }

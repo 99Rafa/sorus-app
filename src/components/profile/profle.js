@@ -125,7 +125,7 @@ export default function profle({ navigation }) {
                 style={{ marginLeft: 10, width: 250 }}>
               </TextInput>
             </View>
-          </View>          
+          </View>
           <View style={styles.button}>
             <TouchableOpacity onPress={UpdateProfile}>
               <Text style={{ color: '#fff' }}>Guardar</Text>

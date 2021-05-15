@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { StyleSheet, SafeAreaView, ActivityIndicator } from 'react-native'
-import { getMainOffers, getMainPage } from "src/libs/service/menu/mainMenuItems";
-import { getQueryItems, getQueryPage } from "src/libs/service/menu/searchOffers";
 import Animated from 'react-native-reanimated'
 import Header from 'src/components/mainMenu/Header'
 import ProductItem from 'src/components/mainMenu/ProductItem';
 import Pagination from 'src/components/mainMenu/Pagination'
+import service from 'src/libs/service/service'
 
 export default function Body() {
 
@@ -24,11 +23,11 @@ export default function Body() {
     setLoading(true)
     let offers = {}
     if (query === "") {
-      offers = await getMainOffers()
+      offers = await service.get('offers/product/list/')
     } else {
-      offers = await getQueryItems(query)
+      offers = await service.post('offers/product/query/', query)
     }
-    if (offers !== 'Error') {
+    if (!offers.error) {
       setResponse(offers)
       setProducts(offers.results)
       setLoading(false)
@@ -43,17 +42,17 @@ export default function Body() {
     setLoading(true)
     let offers = {}
     if (query === "") {
-      offers = await getMainPage(currentPage + i)
+      offers = await service.get(`offers/product/list/?page=${currentPage + i}`)
     } else {
-      offers = await getQueryPage(query, currentPage + i)
+      offers = await service.post(`offers/product/query/?page=${currentPage + i}`, query)
     }
-    if (offers !== "Error") {
+    if (!offers.error) {
       setCurrentPage(currentPage + i)
       setResponse(offers)
       setProducts(offers.results)
       setLoading(false)
     } else {
-      alert('Error al cargar ofertas')
+      alert('Error when loading offers')
     }
     setLoading(false)
   }
