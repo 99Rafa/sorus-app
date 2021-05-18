@@ -3,19 +3,26 @@ import React from 'react'
 import {
   StyleSheet,
   View,
-  Image,
+  FlatList,
   SafeAreaView,
+  Image,
+  TouchableOpacity,
   Text,
 } from 'react-native'
+
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import Animated from 'react-native-reanimated'
 
+
 const { Value } = Animated
+
 
 class Header extends React.Component {
 
+ 
   constructor(props) {
     super(props)
+
 
     this._scroll_y = new Value(0)
   }
@@ -42,6 +49,100 @@ class Header extends React.Component {
       extrapolate: 'clamp'
     })
 
+    //para asignar
+    function onSelectCategory(category) {
+      //filtrar ofertas
+      let ofertastList = ofertasData.filter(a => a.categories.includes(category.id))
+
+      setRestaurants(OfertasList)
+
+      setSelectedCategory(category)
+  }
+    
+    const categoryData = [
+      {
+          id: 1,
+          name: "Electronicos",
+          icon: <Icon name="bell"  />
+      },
+      {
+          id: 2,
+          name: "Supermercado",  
+          icon: <Icon name="bell"  />       
+      },
+      {
+          id: 3,
+          name: "Moda",    
+          //<Icon name="bell" size={25} color="#000" />
+          icon: <Icon name="bell"  />
+      }
+      
+    ]
+  
+    function rendercategory() {
+      
+      const renderItem = ({ item }) => {
+         
+          return (
+              <TouchableOpacity
+                  style={[
+                     
+                        styles.carrusel
+                      ]}
+                      //llamar
+                 // onPress={() => onSelectCategory(item)}
+              >
+                  <View
+                      style={{
+                          width: 50,
+                          height: 50,
+                          borderRadius: 25,
+                          alignItems: "center",
+                          justifyContent: "center",
+                          backgroundColor: '#222'  //(selectedCategory?.id == item.id) ? COLORS.white : COLORS.lightGray
+                      }}
+                  >
+                      <Image
+                          source={item.icon}
+                          resizeMode="contain"
+                          style={{
+                              width: 30,
+                              height: 30
+                              
+                          }}
+                      >
+                        
+                        </Image>
+                  </View>
+  
+                  <Text
+                      style={{
+                          //marginTop: SIZES.padding,
+                          color: "coral"//(selectedCategory?.id == item.id) ? COLORS.white : COLORS.black,
+                          
+                      }}
+                  >
+                      {item.name}
+                  </Text>
+              </TouchableOpacity>
+          )
+      }
+  
+      return (
+          <View style={ styles.carrusel }>
+  
+              <FlatList
+                  data={categoryData}
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  keyExtractor={item => `${item.id}`}
+                  renderItem={renderItem}
+                  contentContainerStyle={styles.fake_post}
+              />
+          </View>
+      )
+  }
+  
 
 
     return (
@@ -57,19 +158,13 @@ class Header extends React.Component {
             }
           ]}
         >
+                     
+      
 
-          <Image
-            source={require('src/assets/SORUS_BLACK.png')}
-            style={{ width: 40, height: 50 }}
-          />
-
-          <Text style={{ fontWeight: 'bold', fontSize: 20 }}>SORUS</Text>
-
-          <View style={styles.fake_icon_box}>
-            <Icon name="bell" size={25} color="#000" />
-          </View>
-
+                     
         </Animated.View>
+        <Text >Categorias</Text>
+        {rendercategory()}
         <Animated.ScrollView
           style={[
             styles.scroll_view,
@@ -128,5 +223,25 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     marginTop: 16,
     borderRadius: 8
-  }
+  },
+  button: {
+    padding: 8,
+    borderRadius: 4,
+    backgroundColor: "oldlace",
+    alignSelf: "flex-start",
+    marginRight: 10,
+    marginBottom: 10,
+  },
+  selected: {
+    backgroundColor: "coral",
+    shadowOpacity: 0,
+    borderWidth: 0,
+  },
+  carrusel: {
+    backgroundColor: '#B1B1B1',
+    
+    flex: 1,
+    width:  '100%',
+    borderRadius: 8,
+  },
 })
