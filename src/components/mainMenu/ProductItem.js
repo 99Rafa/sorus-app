@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react'
 import { Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native'
 import secsToTime from "src/libs/time/secsToTime";
 
-export default function ProductItem({ item, handlePress }) {
+export default function ProductItem({ item, handlePress, trigger }) {
 
-  const [timeLeft, setTimeLeft] = useState('')
+  const [timeLeft, setTimeLeft] = useState({})
 
   useEffect(() => {
-    const { days, hours, minutes, seconds } = secsToTime(item.time_left)
-    setTimeLeft(`${days}:${hours}:${minutes}:${seconds}`)
-  }, [])
+    item.time_left -= 1
+    setTimeLeft(secsToTime(item.time_left))
+  }, [trigger])
 
   return (
     <TouchableOpacity
@@ -20,7 +20,7 @@ export default function ProductItem({ item, handlePress }) {
         <View>
           <Text>{item.name}</Text>
           <Text>{item.price}</Text>
-          <Text>{timeLeft}</Text>
+          <Text>{timeLeft.days}:{timeLeft.hours}:{timeLeft.minutes}:{timeLeft.seconds}</Text>
         </View>
         <Image
           source={{ uri: item.image }}

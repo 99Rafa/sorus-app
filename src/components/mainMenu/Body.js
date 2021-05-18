@@ -14,10 +14,20 @@ export default function Body() {
   const [currentPage, setCurrentPage] = useState(1)
   const [response, setResponse] = useState({})
   const [query, setQuery] = useState('')
+  const [trigger, setTrigger] = useState(true)
 
   useEffect(() => {
     handleSearch()
   }, [query])
+
+  useEffect(() => {
+    timer()
+  }, [])
+
+  const timer = (b) => {
+    setTrigger(!b)
+    setTimeout(() => timer(!b), 1000);
+  }
 
   const handleSearch = async () => {
     setLoading(true)
@@ -76,7 +86,7 @@ export default function Body() {
           loading
             ? <ActivityIndicator color="#000" size="large" style={{ marginTop: 30 }} />
             : <>
-              {products.map((item) => <ProductItem item={item} key={item.name + item.price} handlePress={handlePress} />)}
+              {products.map((item) => <ProductItem item={item} key={item.name + item.price} handlePress={handlePress} trigger={trigger} />)}
 
               <Pagination response={response} changePage={changePage} currentPage={currentPage} />
             </>
