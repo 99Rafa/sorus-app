@@ -4,16 +4,25 @@ import * as ImagePicker from 'expo-image-picker';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { updateProfile } from 'src/libs/service/profile/updateProfileService';
 import * as FileSystem from 'expo-file-system';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function profle({ navigation }) {
-  const [image, setImage] = useState('src/assets/canasta.png');
+  const [image, setImage] = useState("src/assets/sorus.png");
   const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [first_name, setFirst_name] = useState("");
   const [last_name, setLast_name] = useState("");
 
+  const setValues = async () => {
+    setImage(await AsyncStorage.getItem('profile_image'));
+    setFirst_name(await AsyncStorage.getItem('first_name'));
+    setLast_name(await AsyncStorage.getItem('last_name'));
+    setEmail(await AsyncStorage.getItem('email'));
+    setUsername(await AsyncStorage.getItem('username'));
+  }
+
   useEffect(() => {
+    setValues();
     (async () => {
       if (Platform.OS !== 'web') {
         const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -25,6 +34,7 @@ export default function profle({ navigation }) {
     navigation.setOptions({ headerShown: false });
   }, []);
 
+
   UpdateProfile = async () => {
     let image64 = await FileSystem.readAsStringAsync(image, { encoding: 'base64' });
     image64 = `data:image/png;base64,${image64}`
@@ -33,9 +43,9 @@ export default function profle({ navigation }) {
       first_name,
       last_name,
       email,
-      profile_image: image64,
-      password
+      profile_image: image64
     }
+
     const response = await updateProfile(data);
     if (response !== 'Error') {
       alert('Se han actualizado los datos');
@@ -85,7 +95,7 @@ export default function profle({ navigation }) {
             <Text style={styles.textoPrincipal}>Nombre</Text>
             <View style={styles.input}>
               <TextInput
-                placeholder='Jorge'
+                placeholder=''
                 placeholderTextColor="#868686"
                 value={first_name}
                 onChangeText={setFirst_name}
@@ -97,7 +107,7 @@ export default function profle({ navigation }) {
             <Text style={styles.textoPrincipal}>Apellido</Text>
             <View style={styles.input}>
               <TextInput
-                placeholder='Hernandez'
+                placeholder=''
                 value={last_name}
                 onChangeText={setLast_name}
                 style={{ marginLeft: 10, width: 250 }}>
@@ -108,7 +118,7 @@ export default function profle({ navigation }) {
             <Text style={styles.textoPrincipal}>Email</Text>
             <View style={styles.input}>
               <TextInput
-                placeholder='jhernandez@gmail.com'
+                placeholder=''
                 value={email}
                 onChangeText={setEmail}
                 style={{ marginLeft: 10, width: 250 }}>
@@ -119,18 +129,16 @@ export default function profle({ navigation }) {
             <Text style={styles.textoPrincipal}>Nombre de usuario</Text>
             <View style={styles.input}>
               <TextInput
-                placeholder='lokoblack99'
+                placeholder=''
                 value={username}
                 onChangeText={setUsername}
                 style={{ marginLeft: 10, width: 250 }}>
               </TextInput>
             </View>
-          </View>          
-          <View style={styles.button}>
-            <TouchableOpacity onPress={UpdateProfile}>
-              <Text style={{ color: '#fff' }}>Guardar</Text>
-            </TouchableOpacity>
           </View>
+          <TouchableOpacity onPress={UpdateProfile} style={styles.button}>
+            <Text style={{ color: '#fff' }}>Guardar</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </View>
