@@ -5,6 +5,7 @@ import Header from 'src/components/mainMenu/Header'
 import ProductItem from 'src/components/mainMenu/ProductItem';
 import Pagination from 'src/components/mainMenu/Pagination'
 import service from 'src/libs/service/service'
+import Categories from "src/components/mainMenu/Categories";
 
 export default function Body() {
 
@@ -81,7 +82,7 @@ export default function Body() {
         scrollEventThrottle={5}
         onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: _scroll_y } } }])}
       >
-
+        <Categories />
         {
           loading
             ? <ActivityIndicator color="#000" size="large" style={{ marginTop: 30 }} />
