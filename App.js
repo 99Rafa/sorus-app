@@ -7,6 +7,7 @@ import Login from "src/components/login/LoginScreen";
 import StartUpScreen from "src/components/login/StartUpScreen";
 import MenuStack from "src/components/mainMenu/MenuStack"
 import RegisterProduct from "src/components/registerProduct/registerProduct";
+import Register from "src/components/registerUser/registerUser";
 
 const Stack = createStackNavigator()
 
@@ -15,12 +16,16 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator>
 
+        
+
+        <Stack.Screen name="Register" component={Register}/>
         <Stack.Screen name="StartUp" component={StartUpScreen} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Menu" component={MenuStack} />
         <Stack.Screen name="Review" component={ReviewScreen} />
         <Stack.Screen name="RegisterProduct" component={RegisterProduct} />
-      
+        
+
       </Stack.Navigator>
       <StatusBar style="auto" />
     </NavigationContainer>

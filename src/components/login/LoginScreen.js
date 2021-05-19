@@ -39,6 +39,10 @@ export default function Login({ navigation }) {
     }
   }
 
+  const Registrarse = () => {
+    navigation.navigate("Register");
+  }
+
   return (
     <View style={styles.container}>
       <Image style={styles.image} source={require("src/assets/sorus.png")} />
@@ -81,7 +85,7 @@ export default function Login({ navigation }) {
       </TouchableOpacity>
 
       {/* Boton registrarse */}
-      <TouchableOpacity style={styles.singinBtn}>
+      <TouchableOpacity style={styles.singinBtn} onPress={Registrarse}>
         <Text style={styles.singinText}>Registrarse</Text>
       </TouchableOpacity>
 
