@@ -18,6 +18,12 @@ export default function Register({navigation}) {
   const [lastname,setlastName]= useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [errortext, setErrortext] = useState('');
+  const [
+    isRegistrationSuccess,
+    setIsRegistrationSuccess
+  ] = useState(false);
 
 
 
@@ -30,6 +36,62 @@ export default function Register({navigation}) {
   const BackButtonClick = () => {
     navigation.navigate("Login");
   }
+
+  const handleSubmitButton = () => {
+    setErrortext('');
+    if (!username) {
+      alert('Introduzca un nombre de usuario');
+      return;
+    }
+    if (!name) {
+      alert('Introduzca un nombre');
+      return;
+    }
+    if (!last_name) {
+      alert('Introduzca un apellido');
+      return;
+    }
+    if (!email) {
+      alert('Introduzca un correo electronico');
+      return;
+    }
+    if (!password) {
+      alert('Introduzca una contraseña');
+      return;
+    }
+
+    setLoading(true);
+    var dataToSend = {
+      username: userName,
+      first_name: name,
+      last_name: last_name,
+      email: email,
+      password: password,
+    };
+
+    fetch('http://10.0.2.2:8000/users/register/create/', {
+      method: 'POST',
+      headers: {
+        'Contents-Type': 'application/json'
+      },
+      body: JSON.stringify(dataToSend)
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        setLoading(false);
+        console.log(responseJson);
+        if (responseJson.status === 'success') {
+          setIsRegistrationSuccess(true);
+          alert('Usuario registrado exitosamente');
+        } else {
+          setErrortext(responseJson.msg);
+        }
+      })
+      .catch((error) => {
+        setLoading(false);
+        alert('Error al registrar usuario');
+      });
+  };
 
   return (
     <View style={styles.container}>
