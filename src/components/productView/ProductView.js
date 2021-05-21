@@ -1,35 +1,45 @@
 import React from 'react';
-import { SafeAreaView, StatusBar } from 'react-native';
+import { useEffect, useState } from 'react';
+import { SafeAreaView, StatusBar, TouchableOpacity } from 'react-native';
 import styled from 'styled-components'
 import { AntDesign } from '@expo/vector-icons'
+import { Touchable } from 'react-native';
 
-export default function App() {
+export default function ProductView({ route, navigation }) {
+  const [item, setItem] = useState({})
+  useEffect(() => {
+    setItem(route.params);
+    console.log(route);
+    navigation.setOptions({ headerShown: false });
+  }, [])
   return <Container>
-    <StatusBar barStyle='light-content'/>
-    <ProductBackground source={require("./assets/SeriesX.png")}>
+    <StatusBar barStyle='light-content' />
+    <ProductBackground source={{ uri: item.image }}>
       <SafeAreaView>
         <MenuBar>
-          <Back>
-            <AntDesign name="arrowleft" size={32} color="#FFF"/>
-            <Text style={{ marginLeft: 10, fontSize: 20 }}>Volver</Text>
-          </Back>
-          <AntDesign name="star" size={32} color="#FFF"/>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Back>
+              <AntDesign name="arrowleft" size={32} color="#FFF" />
+              <Text style={{ marginLeft: 10, fontSize: 20 }}>Volver</Text>
+            </Back>
+          </TouchableOpacity>
+          <AntDesign name="star" size={32} color="#FFF" style={{ marginTop: 30 }} />
         </MenuBar>
         <MainProduct>
-          <Text style={{ fontSize: 32}}>Nombre del Producto</Text>
+          <Text style={{ fontSize: 32 }}>{item.name}</Text>
           <Divider />
-          <Text style={{ fontSize: 24}}>Categoria</Text>
-          <Text style={{ fontSize: 24}}>Precio</Text>
+          <Text style={{ fontSize: 24 }}>Categoria</Text>
+          <Text style={{ fontSize: 24 }}>{item.price}</Text>
         </MainProduct>
         <Button>
-          <Text style={{ fontSize: 20}}>IR A LA OFERTA</Text>
+          <Text style={{ fontSize: 20 }}>IR A LA OFERTA</Text>
         </Button>
       </SafeAreaView>
     </ProductBackground>
     <DescriptionContainer>
-      <Text dark style={{ fontSize: 24}}>Descripcion</Text>
-      <Text dark>Aqui va la descripcion del producto</Text>
-      
+      <Text dark style={{ fontSize: 24 }}>Descripcion</Text>
+      <Text dark>{item.description}</Text>
+
     </DescriptionContainer>
   </Container>;
 }
@@ -41,13 +51,13 @@ const Container = styled.View`
 
 const Text = styled.Text`
     color: ${(props) => (props.dark ? "#000" : "#FFF")};
-    font-family: "AvenirNext-Regular";
+    font-family: "Poppins";
     fontWeight: bold;
 `;
 
 const ProductBackground = styled.ImageBackground`
     width: 100%;
-    height: 60%;
+    height: 70%;
 `;
 
 const MenuBar = styled.View`
@@ -59,6 +69,7 @@ const MenuBar = styled.View`
 const Back = styled.View`
     flex-direction: row;
     align-items: center;
+    padding-top: 30px;
 `;
 
 const MainProduct = styled.View`
@@ -82,9 +93,9 @@ const Button = styled.TouchableOpacity`
 `;
 
 const DescriptionContainer = styled.View`
-    margin-top: -20px;
+    margin-top: -30px;
     padding: 32px;
     background-color: #FFF;
     border-top-left-radius: 24px;
     border-top-right-radius: 24px;
-`
+`;

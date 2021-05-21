@@ -9,7 +9,7 @@ import StartUpScreen from "src/components/login/StartUpScreen";
 import MenuStack from "src/components/mainMenu/MenuStack"
 import RegisterProduct from "src/components/registerProduct/registerProduct";
 import Profile from "src/components/profile/profle";
-import ProductView from "src/components/productView/product";
+import ProductView from "src/components/productView/ProductView";
 import Register from "src/components/registerUser/registerUser";
 
 const Stack = createStackNavigator()
