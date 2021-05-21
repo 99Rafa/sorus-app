@@ -9,6 +9,7 @@ import StartUpScreen from "src/components/login/StartUpScreen";
 import MenuStack from "src/components/mainMenu/MenuStack"
 import RegisterProduct from "src/components/registerProduct/registerProduct";
 import Profile from "src/components/profile/profle";
+import ProductView from "src/components/productView/product";
 
 const Stack = createStackNavigator()
 
@@ -30,6 +31,7 @@ export default function App() {
         <Stack.Screen name="StartUp" component={StartUpScreen} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Menu" component={MenuStack} />
+        <Stack.Screen name="ProductView" component={ProductView} />
         <Stack.Screen name="Review" component={ReviewScreen} />
         <Stack.Screen name="RegisterProduct" component={RegisterProduct} />
         <Stack.Screen name="Profile" component={Profile} />
