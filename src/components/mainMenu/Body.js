@@ -7,7 +7,7 @@ import Pagination from 'src/components/mainMenu/Pagination'
 import service from 'src/libs/service/service'
 import Categories from "src/components/mainMenu/Categories";
 
-export default function Body() {
+export default function Body({navigation}) {
 
   const [_scroll_y,] = useState(new Animated.Value(0));
   const [products, setProducts] = useState([])
@@ -69,7 +69,7 @@ export default function Body() {
   }
 
   const handlePress = item => {
-
+    navigation.navigate("ProductView", item)
   }
 
   return (
