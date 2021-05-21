@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { View } from 'react-native'
 import service from 'src/libs/service/service'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function StartUpScreen({ navigation }) {
 
@@ -14,7 +15,8 @@ export default function StartUpScreen({ navigation }) {
       .then(_ => {
         navigation.navigate('Menu')
       })
-      .catch(err => {
+      .catch(async err => {
+        await AsyncStorage.clear()
         navigation.navigate('Login')
         console.log(err)
       })

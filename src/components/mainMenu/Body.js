@@ -5,6 +5,7 @@ import Header from 'src/components/mainMenu/Header'
 import ProductItem from 'src/components/mainMenu/ProductItem';
 import Pagination from 'src/components/mainMenu/Pagination'
 import service from 'src/libs/service/service'
+import Categories from "src/components/mainMenu/Categories";
 
 export default function Body() {
 
@@ -14,10 +15,20 @@ export default function Body() {
   const [currentPage, setCurrentPage] = useState(1)
   const [response, setResponse] = useState({})
   const [query, setQuery] = useState('')
+  const [trigger, setTrigger] = useState(true)
 
   useEffect(() => {
     handleSearch()
   }, [query])
+
+  useEffect(() => {
+    timer()
+  }, [])
+
+  const timer = (b) => {
+    setTrigger(!b)
+    setTimeout(() => timer(!b), 1000);
+  }
 
   const handleSearch = async () => {
     setLoading(true)
@@ -71,12 +82,12 @@ export default function Body() {
         scrollEventThrottle={5}
         onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: _scroll_y } } }])}
       >
-
+        <Categories />
         {
           loading
             ? <ActivityIndicator color="#000" size="large" style={{ marginTop: 30 }} />
             : <>
-              {products.map((item) => <ProductItem item={item} key={item.name + item.price} handlePress={handlePress} />)}
+              {products.map((item) => <ProductItem item={item} key={item.name + item.price} handlePress={handlePress} trigger={trigger} />)}
 
               <Pagination response={response} changePage={changePage} currentPage={currentPage} />
             </>
