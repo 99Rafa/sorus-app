@@ -15,7 +15,7 @@ export default function StartUpScreen({ navigation }) {
       .then(_ => {
         navigation.navigate('Menu')
       })
-      .catch(err => {
+      .catch(async err => {
         await AsyncStorage.clear()
         navigation.navigate('Login')
         console.log(err)
