@@ -70,11 +70,11 @@ export default function DrawerContent({ navigation, ...props }) {
             <View style={styles.row}>
               <View style={styles.section}>
                 <Paragraph style={[styles.paragraph, styles.caption]}>0</Paragraph>
-                <Caption style={styles.caption}>Publications</Caption>
+                <Caption style={styles.caption}>Publicaciones</Caption>
               </View>
               <View style={styles.section}>
                 <Paragraph style={[styles.paragraph, styles.caption]}>35</Paragraph>
-                <Caption style={styles.caption}>Following</Caption>
+                <Caption style={styles.caption}>Ventas</Caption>
               </View>
             </View>
           </View>
@@ -167,13 +167,14 @@ const styles = StyleSheet.create({
     paddingLeft: 16,
   },
   title: {
-    fontSize: 16,
+    fontSize: 15,
     marginTop: 3,
-    fontWeight: 'bold',
+    fontFamily: 'PoppinsBold'
   },
   caption: {
-    fontSize: 14,
+    fontSize: 12.5,
     lineHeight: 14,
+    fontFamily:'Poppins'
   },
   row: {
     marginTop: 20,

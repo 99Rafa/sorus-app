@@ -1,6 +1,6 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
-import { SafeAreaView, StatusBar, TouchableOpacity } from 'react-native';
+import { SafeAreaView, StatusBar, TouchableOpacity, StyleSheet } from 'react-native';
 import styled from 'styled-components'
 import { AntDesign } from '@expo/vector-icons'
 
@@ -20,32 +20,43 @@ export default function ProductView({ route, navigation }) {
         <MenuBar>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Back>
-              <AntDesign name="arrowleft" size={32} color="#FFF" />
-              <Text style={{ marginLeft: 10, fontSize: 20 }}>Volver</Text>
+              <AntDesign name="arrowleft" size={32} color="#FFF" style={styles.text_shadow} />
+              <Text style={[styles.text_shadow, { marginLeft: 10, fontSize: 20,fontFamily: 'PoppinsBold' }]}>Volver</Text>
             </Back>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate("Review")}>
-            <AntDesign name="star" size={32} color="#FFF" style={{ marginTop: 30 }} />
+            <AntDesign name="star" size={32} color="#FFF" style={[{ marginTop: 30 }, styles.text_shadow]} />
           </TouchableOpacity>
         </MenuBar>
         <MainProduct>
-          <Text style={{ fontSize: 32 }}>{item.name}</Text>
+          <Text style={[{ fontSize: 32, fontFamily: 'PoppinsBold' }, styles.text_shadow]}>{item.name}</Text>
           <Divider />
-          <Text style={{ fontSize: 24 }}>Categoria</Text>
-          <Text style={{ fontSize: 24 }}>{item.price}</Text>
+          <Text style={[{ fontSize: 24, fontFamily: 'PoppinsBold' }, styles.text_shadow]}>Categoria</Text>
+          <Text style={[{ fontSize: 24, fontFamily: 'PoppinsBold' }, styles.text_shadow]}>$ {item.price}</Text>
         </MainProduct>
         <Button>
-          <Text style={{ fontSize: 20 }}>IR A LA OFERTA</Text>
+          <Text style={{ fontSize: 18,fontFamily: 'PoppinsBold' }}>IR A LA OFERTA</Text>
         </Button>
       </SafeAreaView>
     </ProductBackground>
-    <DescriptionContainer>
-      <Text dark style={{ fontSize: 24 }}>Descripcion</Text>
-      <Text dark>{item.description}</Text>
+    <DescriptionContainer style={ styles.border_description}>
+      <Text dark style={{ fontSize: 24, fontFamily: 'PoppinsBold'}}>Descripcion</Text>
+      <Text dark >{item.description}</Text>
 
     </DescriptionContainer>
   </Container>;
 }
+
+const styles = StyleSheet.create({
+  text_shadow: {
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 13,
+    textShadowColor: '#000',
+  },
+  border_description: {
+    flex: 1
+  }
+})
 
 const Container = styled.View`
     flex: 1;
@@ -98,7 +109,7 @@ const Button = styled.TouchableOpacity`
 const DescriptionContainer = styled.View`
     margin-top: -30px;
     padding: 32px;
-    background-color: #FFF;
+    background-color: #e9e9e9;
     border-top-left-radius: 24px;
     border-top-right-radius: 24px;
 `;
