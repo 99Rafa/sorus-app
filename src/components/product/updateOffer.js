@@ -11,6 +11,7 @@ import * as FileSystem from 'expo-file-system';
 
 export default function updateOffer({ navigation }) {
     const [selectedItem, setSelectedItem] = useState({});
+    const [selectedCategory, setSelectedCategory] = useState("");
     const [offers, setOffers] = useState([])
     const [date, setDate] = useState(new Date());
     const [mode, setMode] = useState('date');
@@ -47,7 +48,8 @@ export default function updateOffer({ navigation }) {
             price,
             image,
             end_date: date,
-            id: id
+            id: id,
+            category: selectedCategory
         }
 
         const response = await updateProduct(data);
@@ -111,7 +113,47 @@ export default function updateOffer({ navigation }) {
         setDate(new Date(item.end_date));
         setPrice(item.price.toString())
         setId(item.id.toString());
+        compareIdCategory(item.id);
     }
+
+    const compareIdCategory = (item) => {
+        for (let category of categories) {            
+            if(category.id == item){
+                console.log(category.id);
+                setSelectedCategory(category);
+            }
+        }        
+    }
+
+    const categories = [
+        {
+            name: 'Electronica',
+            id: '1'
+        },
+        {
+            name: 'Celulares',
+            id: '2'
+        },
+        {
+            name: 'Moda',
+            id: '3'
+        },
+        {
+            name: 'Supermercado',
+            id: '4'
+        },
+        {
+            name: 'Accesorios',
+            id: '5'
+        },
+        {
+            name: 'Herramientas',
+            id: '6'
+        },
+        {
+            name: 'Juguetes',
+            id: '7'
+        },];
 
     return (
         <View style={{ flex: 1, flexDirection: 'column', position: 'relative' }}>
@@ -192,7 +234,14 @@ export default function updateOffer({ navigation }) {
                             </TextInput>
                         </View>
                     </View>
-
+                    <View style={styles.form}>
+                        <Text style={styles.textoPrincipal}>Categoria</Text>
+                        <Picker style={styles.style_picker2}
+                            selectedValue={selectedCategory}
+                            onValueChange={setSelectedCategory}>
+                            {categories.map(item => <Picker.Item value={item.id} label={item.name} key={item.name + item.id} />)}
+                        </Picker>
+                    </View>
                     <TouchableOpacity style={styles.button} onPress={Update}>
                         <Text style={{ color: '#fff' }}>Guardar</Text>
                     </TouchableOpacity>
@@ -232,6 +281,11 @@ const styles = StyleSheet.create({
         borderColor: '#000',
         color: '#fff'
     },
+    style_picker2: {
+        height: 40,
+        width: 300,
+        color: '#868686'
+    },
     circle: {
         position: 'absolute',
         backgroundColor: 'white',
@@ -270,13 +324,13 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0, 0, 0, 0.09)'
     },
     form: {
-        marginTop: 20
+        marginTop: 15
     },
     button: {
         width: 300,
         height: 40,
         backgroundColor: '#4D194D',
-        marginTop: 30,
+        marginTop: 20,
         borderRadius: 20,
         shadowOpacity: 0.41,
         shadowRadius: 9.11,
@@ -324,9 +378,9 @@ const styles = StyleSheet.create({
         display: 'flex',
         alignItems: 'flex-start',
         flexDirection: 'row',
-        paddingTop: 5,
+        padding: 5,
         width: 300,
-        height: 80,
+        height: 60,
         borderRadius: 20,
         backgroundColor: 'rgba(0, 0, 0, 0.09)'
     },
