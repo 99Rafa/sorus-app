@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, Image, TextInput } from 'react-native'
 import { Picker } from '@react-native-picker/picker';
 import * as ImagePicker from 'expo-image-picker';
@@ -10,8 +10,8 @@ import * as FileSystem from 'expo-file-system';
 
 
 export default function updateOffer({ navigation }) {
-    const [selectedItem, setSelectedItem] = useState({});
-    const [selectedCategory, setSelectedCategory] = useState("");
+    const [selectedItem,] = useState({});
+    const [category, setCategory] = useState({});
     const [offers, setOffers] = useState([])
     const [date, setDate] = useState(new Date());
     const [mode, setMode] = useState('date');
@@ -22,7 +22,6 @@ export default function updateOffer({ navigation }) {
     const [description, setDescription] = useState("");
     const [price, setPrice] = useState("");
     const [changeImg, setChangeImg] = useState(false);
-
 
     useEffect(() => {
         GetInfoOfer();
@@ -38,6 +37,11 @@ export default function updateOffer({ navigation }) {
     }, []);
 
     const Update = async () => {
+        if (category.id === undefined) {
+            alert('Selecciona una categoria')
+            return
+        }
+
         if (changeImg) {
             let image64 = await FileSystem.readAsStringAsync(image, { encoding: 'base64' });
             setImage(`data:image/png;base64,${image64}`);
@@ -49,7 +53,7 @@ export default function updateOffer({ navigation }) {
             image,
             end_date: date,
             id: id,
-            category: selectedCategory
+            category: category.id
         }
 
         const response = await updateProduct(data);
@@ -113,19 +117,22 @@ export default function updateOffer({ navigation }) {
         setDate(new Date(item.end_date));
         setPrice(item.price.toString())
         setId(item.id.toString());
-        compareIdCategory(item.id);
+        compareIdCategory(item.category);
     }
 
     const compareIdCategory = (item) => {
-        for (let category of categories) {            
-            if(category.id == item){
-                console.log(category.id);
-                setSelectedCategory(category);
+        for (let c of categories) {
+            if (c.id == item) {
+                setCategory(c)
             }
-        }        
+        }
     }
 
     const categories = [
+        {
+            name: 'Selecciona una categoria',
+            id: undefined
+        },
         {
             name: 'Electronica',
             id: '1'
@@ -153,7 +160,8 @@ export default function updateOffer({ navigation }) {
         {
             name: 'Juguetes',
             id: '7'
-        },];
+        },
+    ];
 
     return (
         <View style={{ flex: 1, flexDirection: 'column', position: 'relative' }}>
@@ -237,9 +245,9 @@ export default function updateOffer({ navigation }) {
                     <View style={styles.form}>
                         <Text style={styles.textoPrincipal}>Categoria</Text>
                         <Picker style={styles.style_picker2}
-                            selectedValue={selectedCategory}
-                            onValueChange={setSelectedCategory}>
-                            {categories.map(item => <Picker.Item value={item.id} label={item.name} key={item.name + item.id} />)}
+                            selectedValue={category}
+                            onValueChange={setCategory}>
+                            {categories.map(item => <Picker.Item value={item} label={item.name} key={item.id + item.name} />)}
                         </Picker>
                     </View>
                     <TouchableOpacity style={styles.button} onPress={Update}>
