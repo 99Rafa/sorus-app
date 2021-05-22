@@ -83,7 +83,7 @@ export default function DrawerContent({ navigation, ...props }) {
                   size={size}
                 />
               )}
-              label="Home"
+              label="Menu"
               onPress={() => { }}
             />
 
@@ -95,7 +95,7 @@ export default function DrawerContent({ navigation, ...props }) {
                   size={size}
                 />
               )}
-              label="Profile"
+              label="Perfil"
               onPress={() => { navigation.navigate("Profile")}}
             />
 
@@ -107,8 +107,8 @@ export default function DrawerContent({ navigation, ...props }) {
                   size={size}
                 />
               )}
-              label="Bookmarks"
-              onPress={() => { }}
+              label="Mis Ofertas"
+              onPress={() => { navigation.navigate("UpdateOfert") }}
             />
 
             <DrawerItem
@@ -119,7 +119,7 @@ export default function DrawerContent({ navigation, ...props }) {
                   size={size}
                 />
               )}
-              label="Offers"
+              label="Subir Oferta"
               onPress={() => { navigation.navigate('RegisterProduct') }}
             />
 
@@ -147,7 +147,7 @@ export default function DrawerContent({ navigation, ...props }) {
               size={size}
             />
           )}
-          label="Sign Out"
+          label="Cerrar Sesión"
           onPress={logout}
         />
       </Drawer.Section>
