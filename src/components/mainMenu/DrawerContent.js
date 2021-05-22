@@ -56,7 +56,7 @@ export default function DrawerContent({ navigation, ...props }) {
             <View style={{ flexDirection: 'row', marginTop: 15 }}>
               <Avatar.Image
                 source={{
-                  uri: image
+                  uri: image ? image : '000'
                 }}
                 size={60}
               />
@@ -88,7 +88,7 @@ export default function DrawerContent({ navigation, ...props }) {
                 />
               )}
               label="Menu"
-              onPress={() => { }}
+              onPress={() => { navigation.navigate("Home") }}
             />
 
             <DrawerItem
@@ -112,7 +112,7 @@ export default function DrawerContent({ navigation, ...props }) {
                 />
               )}
               label="Mis Ofertas"
-              onPress={() => { navigation.navigate("UpdateOfert") }}
+              onPress={() => { navigation.navigate("UpdateOffer") }}
             />
 
             <DrawerItem

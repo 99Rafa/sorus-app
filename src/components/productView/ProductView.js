@@ -3,15 +3,16 @@ import { useEffect, useState } from 'react';
 import { SafeAreaView, StatusBar, TouchableOpacity } from 'react-native';
 import styled from 'styled-components'
 import { AntDesign } from '@expo/vector-icons'
-import { Touchable } from 'react-native';
 
 export default function ProductView({ route, navigation }) {
+
   const [item, setItem] = useState({})
+
   useEffect(() => {
     setItem(route.params);
-    console.log(route);
     navigation.setOptions({ headerShown: false });
   }, [])
+
   return <Container>
     <StatusBar barStyle='light-content' />
     <ProductBackground source={{ uri: item.image }}>
@@ -23,7 +24,9 @@ export default function ProductView({ route, navigation }) {
               <Text style={{ marginLeft: 10, fontSize: 20 }}>Volver</Text>
             </Back>
           </TouchableOpacity>
-          <AntDesign name="star" size={32} color="#FFF" style={{ marginTop: 30 }} />
+          <TouchableOpacity onPress={() => navigation.navigate("Review")}>
+            <AntDesign name="star" size={32} color="#FFF" style={{ marginTop: 30 }} />
+          </TouchableOpacity>
         </MenuBar>
         <MainProduct>
           <Text style={{ fontSize: 32 }}>{item.name}</Text>

@@ -12,6 +12,7 @@ export default function profle({ navigation }) {
   const [email, setEmail] = useState("");
   const [first_name, setFirst_name] = useState("");
   const [last_name, setLast_name] = useState("");
+  const [changeImg, setChangeImg] = useState(false)
 
   const setValues = async () => {
     setImage(await AsyncStorage.getItem('profile_image'));
@@ -34,26 +35,21 @@ export default function profle({ navigation }) {
     navigation.setOptions({ headerShown: false });
   }, []);
 
-
-  UpdateProfile = async () => {
-    let image64 = await FileSystem.readAsStringAsync(image, { encoding: 'base64' });
-    image64 = `data:image/png;base64,${image64}`
+  const UpdateProfile = async () => {
+    if (changeImg) {
+      let image64 = await FileSystem.readAsStringAsync(image, { encoding: 'base64' });
+      setImage(`data:image/png;base64,${image64}`)
+    }
     const data = {
       username,
       first_name,
       last_name,
       email,
-      profile_image: image64
+      profile_image: image
     }
 
-    const response = await updateProfile(data);
-    if (response !== 'Error') {
-      alert('Se han actualizado los datos');
-    } else {
-      alert('No se pudo actualizar los datos');
-    }
-    service.post('users/profile/update/', data)
-      .then(_ => {
+    service.patch('users/profile/update/', data)
+      .then(() => {
         alert('Se han actualizado los datos')
       })
       .catch(err => {
@@ -63,11 +59,7 @@ export default function profle({ navigation }) {
   }
 
   const BackButtonClick = () => {
-    navigation.navigate("Menu");
-  }
-
-  const saveUser = () => {
-    navigation.navigate("Menu");
+    navigation.navigate("Home");
   }
 
   const pickImage = async () => {
@@ -79,6 +71,7 @@ export default function profle({ navigation }) {
     });
 
     if (!result.cancelled) {
+      setChangeImg(true)
       setImage(result.uri);
     }
   };
@@ -87,7 +80,7 @@ export default function profle({ navigation }) {
     <View style={{ flex: 1, flexDirection: 'column', position: 'relative' }}>
       <View style={styles.contentMain}>
         <TouchableOpacity onPress={BackButtonClick} style={{ top: 30 }} >
-          <Icon name='chevron-left' size={45}></Icon>
+          <Icon name='chevron-left' size={45} color="#fff"></Icon>
         </TouchableOpacity>
       </View>
       <View style={styles.circle}>
@@ -143,11 +136,6 @@ export default function profle({ navigation }) {
                 style={{ marginLeft: 10, width: 250 }}>
               </TextInput>
             </View>
-          </View>
-          <View style={styles.button}>
-            <TouchableOpacity onPress={UpdateProfile}>
-              <Text style={{ color: '#fff' }}>Guardar</Text>
-            </TouchableOpacity>
           </View>
           <TouchableOpacity onPress={UpdateProfile} style={styles.button}>
             <Text style={{ color: '#fff' }}>Guardar</Text>

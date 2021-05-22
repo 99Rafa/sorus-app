@@ -4,12 +4,12 @@ import { Picker } from '@react-native-picker/picker';
 import * as ImagePicker from 'expo-image-picker';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { updateOfer } from 'src/libs/service/registerProducts/updateOferService';
-import { getInfoOfer } from 'src/libs/service/registerProducts/getInfoOferService';
+import { updateProduct } from 'src/libs/service/registerProducts/updateOfferService';
+import { getInfoOffer } from 'src/libs/service/registerProducts/getInfoOfferService';
 import * as FileSystem from 'expo-file-system';
 
 
-export default function updateOfert({ navigation }) {
+export default function updateOffer({ navigation }) {
     const [selectedItem, setSelectedItem] = useState({});
     const [offers, setOffers] = useState([])
     const [date, setDate] = useState(new Date());
@@ -37,10 +37,10 @@ export default function updateOfert({ navigation }) {
     }, []);
 
     const Update = async () => {
-        if(changeImg){
+        if (changeImg) {
             let image64 = await FileSystem.readAsStringAsync(image, { encoding: 'base64' });
-            setImage (`data:image/png;base64,${image64}`)
-        }        
+            setImage(`data:image/png;base64,${image64}`);
+        }
         const data = {
             name,
             description,
@@ -50,7 +50,7 @@ export default function updateOfert({ navigation }) {
             id: id
         }
 
-        const response = await updateOfer(data);
+        const response = await updateProduct(data);
         if (response !== 'Error') {
             alert('Se han actualizado los datos');
         } else {
@@ -59,17 +59,16 @@ export default function updateOfert({ navigation }) {
     }
 
     const GetInfoOfer = async () => {
-        const response = await getInfoOfer();
+        const response = await getInfoOffer();
         if (response !== 'Error') {
             setOffers(response);
-            console.log('Se ha obtenido la información');
         } else {
             console.log('No se pudo obtener los datos');
         }
     }
 
     const BackButtonClick = () => {
-        navigation.navigate("Menu");
+        navigation.navigate("Home");
     }
 
     const onChange = (event, selectedDate) => {
@@ -118,7 +117,7 @@ export default function updateOfert({ navigation }) {
         <View style={{ flex: 1, flexDirection: 'column', position: 'relative' }}>
             <View style={styles.contentMain}>
                 <TouchableOpacity onPress={BackButtonClick} style={{ top: 30 }} >
-                    <Icon name='chevron-left' size={45}></Icon>
+                    <Icon name='chevron-left' size={45} color="#fff" ></Icon>
                 </TouchableOpacity>
             </View>
             <View style={styles.circle}>
@@ -130,7 +129,7 @@ export default function updateOfert({ navigation }) {
             </View>
             <View style={styles.cont_1}>
                 <Picker style={styles.style_picker}
-                    selectedValue={selectedItem}                    
+                    selectedValue={selectedItem}
                     onValueChange={setInfo}>
                     {offers.map(item => <Picker.Item value={item} label={item.name} key={item.name + item.price} />)}
                 </Picker>

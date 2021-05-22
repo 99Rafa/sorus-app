@@ -19,12 +19,12 @@ export default function Categories() {
     {
       id: 2,
       name: "Supermercado",
-      icon: "bell"
+      icon: "algolia"
     },
     {
       id: 3,
       name: "Moda",
-      icon: "bell"
+      icon: "address-card"
     }
   ])
 
