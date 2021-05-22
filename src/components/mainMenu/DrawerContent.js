@@ -1,12 +1,17 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Avatar, Title, Caption, Paragraph, Drawer } from 'react-native-paper';
 import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import service from 'src/libs/service/service'
+import service from 'src/libs/service/service';
+import { getInfoUser } from 'src/libs/service/profile/getInfoUser';
 
 export default function DrawerContent({ navigation, ...props }) {
+  const [first_name, setFirst_name] = useState("");
+  const [email, setEmail] = useState("");
+  const [last_name, setLast_name] = useState("");
+  const [image, setImage] = useState("src/assets/sorus.png")
 
   const logout = () => {
     service.post('users/logout/')
@@ -20,6 +25,29 @@ export default function DrawerContent({ navigation, ...props }) {
       })
   }
 
+  useEffect(() => {
+    GetInfoUser();
+  }, []);
+
+  GetInfoUser = async () => {
+    const response = await getInfoUser();
+    const data = response.data;
+    if (response !== 'Error') {
+      await AsyncStorage.setItem('username', data.username);
+      await AsyncStorage.setItem('first_name', data.first_name);
+      setFirst_name(data.first_name)
+      await AsyncStorage.setItem('last_name', data.last_name);
+      setLast_name(data.last_name)
+      await AsyncStorage.setItem('email', data.email);
+      setEmail(data.email)
+      await AsyncStorage.setItem('profile_image', data.profile_image);
+      setImage(data.profile_image);
+      console.log('Se ha obtenido la información');
+    } else {
+      console.log('No se pudo obtener los datos');
+    }
+  }
+
   return (
     <View style={{ flex: 1 }}>
       <DrawerContentScrollView {...props}>
@@ -28,13 +56,14 @@ export default function DrawerContent({ navigation, ...props }) {
             <View style={{ flexDirection: 'row', marginTop: 15 }}>
               <Avatar.Image
                 source={{
-                  uri: 'https://i.pinimg.com/originals/93/de/21/93de216d2537fa80e0895f1225eabba5.jpg'
+                  uri: image
                 }}
                 size={60}
               />
               <View style={{ marginLeft: 15, flexDirection: 'column' }}>
-                <Title style={styles.title}>Saúl López Carmona</Title>
-                <Caption style={styles.caption}>@SaulJoestar</Caption>
+                <Title style={styles.title}>{first_name} {last_name}
+                </Title>
+                <Caption style={styles.caption}>{email}</Caption>
               </View>
             </View>
 
@@ -58,7 +87,7 @@ export default function DrawerContent({ navigation, ...props }) {
                   size={size}
                 />
               )}
-              label="Home"
+              label="Menu"
               onPress={() => { }}
             />
 
@@ -70,7 +99,7 @@ export default function DrawerContent({ navigation, ...props }) {
                   size={size}
                 />
               )}
-              label="Profile"
+              label="Perfil"
               onPress={() => { navigation.navigate("Profile") }}
             />
 
@@ -82,8 +111,8 @@ export default function DrawerContent({ navigation, ...props }) {
                   size={size}
                 />
               )}
-              label="Bookmarks"
-              onPress={() => { }}
+              label="Mis Ofertas"
+              onPress={() => { navigation.navigate("UpdateOfert") }}
             />
 
             <DrawerItem
@@ -94,7 +123,7 @@ export default function DrawerContent({ navigation, ...props }) {
                   size={size}
                 />
               )}
-              label="Offers"
+              label="Subir Oferta"
               onPress={() => { navigation.navigate('RegisterProduct') }}
             />
 
@@ -122,7 +151,7 @@ export default function DrawerContent({ navigation, ...props }) {
               size={size}
             />
           )}
-          label="Sign Out"
+          label="Cerrar Sesión"
           onPress={logout}
         />
       </Drawer.Section>

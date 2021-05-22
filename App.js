@@ -6,6 +6,7 @@ import { useFonts } from 'expo-font';
 import ReviewScreen from "src/components/feedback/feedback";
 import Login from "src/components/login/LoginScreen";
 import StartUpScreen from "src/components/login/StartUpScreen";
+import UpdateOfert from "src/components/product/updateOfert";
 import MenuStack from "src/components/mainMenu/MenuStack"
 import RegisterProduct from "src/components/registerProduct/registerProduct";
 import Profile from "src/components/profile/profle";
@@ -28,8 +29,9 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-
+        
         <Stack.Screen name="StartUp" component={StartUpScreen} />
+        <Stack.Screen name="UpdateOfert" component={UpdateOfert} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Menu" component={MenuStack} />
         <Stack.Screen name="ProductView" component={ProductView} />
