@@ -13,19 +13,24 @@ export default function Categories() {
   const [categoryData, setCategoryData] = useState([
     {
       id: 1,
-      name: "Electronicos",
-      icon: "bell"
+      name: "Celulares",
+      icon: "mobile-alt"
     },
     {
       id: 2,
-      name: "Supermercado",
-      icon: "algolia"
+      name: "Moda",
+      icon: "tshirt"
     },
     {
       id: 3,
-      name: "Moda",
-      icon: "address-card"
-    }
+      name: "Accesorios",
+      icon: "ring"
+    },
+    {
+      id: 4,
+      name: "Juguetes",
+      icon: "car"
+    },
   ])
 
   const renderItem = ({ item }) => {
@@ -41,19 +46,20 @@ export default function Categories() {
           style={{
             width: 50,
             height: 50,
-            borderRadius: 25,
+            borderRadius: 20,
             alignItems: "center",
             justifyContent: "center",
-            backgroundColor: '#666'  //(selectedCategory?.id == item.id) ? COLORS.white : COLORS.lightGray
+            backgroundColor: '#312244'  //(selectedCategory?.id == item.id) ? COLORS.white : COLORS.lightGray
           }}
         >
-          <Icon name={item.icon} size={25} />
+          <Icon name={item.icon} size={25} color='#fff'/>
         </View>
-
+          
         <Text
-          style={{
-            //marginTop: SIZES.padding,
-            color: "coral"//(selectedCategory?.id == item.id) ? COLORS.white : COLORS.black,
+          style={{            
+            color: "#272640",
+            fontSize: 12,
+            fontFamily: 'Poppins'
           }}
         >
           {item.name}
@@ -83,9 +89,14 @@ const styles = StyleSheet.create({
     borderWidth: 0,
   },
   carrusel: {
-    backgroundColor: '#B1B1B1',
     flex: 1,
     width: '100%',
     borderRadius: 8,
+    paddingLeft:10,
+    paddingRight:10,
+    paddingTop:5,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
   },
 })

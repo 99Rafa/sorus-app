@@ -17,15 +17,16 @@ export default function ProductItem({ item, handlePress, trigger }) {
       onPress={() => handlePress(item)}
     >
       <>
-        <View>
-          <Text>{item.name}</Text>
-          <Text>{item.price}</Text>
-          <Text>{timeLeft.days}:{timeLeft.hours}:{timeLeft.minutes}:{timeLeft.seconds}</Text>
-        </View>
-        <Image
+      <Image
           source={{ uri: item.image }}
-          style={{ width: 80, height: 80, marginLeft: 'auto', borderRadius: 8 }}
+          style={{ width: 80, height: 80, borderRadius: 8 }}
         />
+        <View style={{marginLeft: 20}}>
+          <Text style={{fontFamily: 'PoppinsBold', fontSize: 14}}>{item.name}</Text>
+          <Text  style={{fontFamily: 'PoppinsBold', color: '#006466', fontSize: 17}}>$ {item.price}</Text>
+          <Text  style={{fontFamily: 'PoppinsBold', color: '#272640', fontSize: 17}}>{timeLeft.days}:{timeLeft.hours}:{timeLeft.minutes}:{timeLeft.seconds}</Text>
+        </View>
+        
       </>
     </TouchableOpacity>
   )

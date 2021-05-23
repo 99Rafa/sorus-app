@@ -83,7 +83,7 @@ export default function Register({ navigation }) {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={{ top: 40, marginRight: 300 }} onPress={BackButtonClick}>
-        <Icon name='chevron-left' size={25} ></Icon>
+        <Icon name='chevron-left' size={25} color='#fff'></Icon>
       </TouchableOpacity>
 
       <Text style={styles.header}>Registro</Text>
