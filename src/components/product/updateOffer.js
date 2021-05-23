@@ -41,16 +41,16 @@ export default function updateOffer({ navigation }) {
             alert('Selecciona una categoria')
             return
         }
-
+        let image64 = "";
         if (changeImg) {
-            let image64 = await FileSystem.readAsStringAsync(image, { encoding: 'base64' });
-            setImage(`data:image/png;base64,${image64}`);
+            image64 = await FileSystem.readAsStringAsync(image, { encoding: 'base64' });
+            image64 = `data:image/png;base64,${image64}`;
         }
         const data = {
             name,
             description,
             price,
-            image,
+            image: changeImg ? image64 : image,
             end_date: date,
             id: id,
             category: category.id

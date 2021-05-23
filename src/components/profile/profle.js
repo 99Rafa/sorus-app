@@ -36,18 +36,18 @@ export default function profle({ navigation }) {
   }, []);
 
   const UpdateProfile = async () => {
+    let image64 = ""
     if (changeImg) {
-      let image64 = await FileSystem.readAsStringAsync(image, { encoding: 'base64' });
-      setImage(`data:image/png;base64,${image64}`)
+      image64 = await FileSystem.readAsStringAsync(image, { encoding: 'base64' });
+      image64 = `data:image/png;base64,${image64}`;
     }
     const data = {
       username,
       first_name,
       last_name,
       email,
-      profile_image: image
+      profile_image: changeImg ? image64 : image
     }
-
     service.patch('users/profile/update/', data)
       .then(() => {
         alert('Se han actualizado los datos')
