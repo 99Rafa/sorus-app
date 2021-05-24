@@ -5,19 +5,16 @@ import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import service from 'src/libs/service/service';
-import { getInfoUser } from 'src/libs/service/profile/getInfoUser';
+import userData from 'src/libs/user/userData';
 
 export default function DrawerContent({ navigation, ...props }) {
-  const [first_name, setFirst_name] = useState("");
-  const [email, setEmail] = useState("");
-  const [last_name, setLast_name] = useState("");
-  const [image, setImage] = useState("src/assets/sorus.png")
 
   const logout = () => {
     service.post('users/logout/')
-      .then(async _ => {
+      .then(async () => {
         await AsyncStorage.clear()
-        navigation.navigate("Login")
+        navigation.pop()
+        navigation.navigate('Login')
       })
       .catch(err => {
         alert('Error al iniciar sesión')
@@ -29,22 +26,15 @@ export default function DrawerContent({ navigation, ...props }) {
     GetInfoUser();
   }, []);
 
-  GetInfoUser = async () => {
-    const response = await getInfoUser();
-    const data = response.data;
-    if (response !== 'Error') {
-      await AsyncStorage.setItem('username', data.username);
-      await AsyncStorage.setItem('first_name', data.first_name);
-      setFirst_name(data.first_name)
-      await AsyncStorage.setItem('last_name', data.last_name);
-      setLast_name(data.last_name)
-      await AsyncStorage.setItem('email', data.email);
-      setEmail(data.email)
-      await AsyncStorage.setItem('profile_image', data.profile_image);
-      setImage(data.profile_image);
-    } else {
-      console.log('No se pudo obtener los datos');
-    }
+  GetInfoUser = () => {
+    service.get('users/profile/info/')
+      .then(response => {
+        userData.setValues(response.data)
+      })
+      .catch(error => {
+        console.log('No se pudieron cargar los datos del usuario')
+        console.log(error)
+      })
   }
 
   return (
@@ -55,14 +45,14 @@ export default function DrawerContent({ navigation, ...props }) {
             <View style={{ flexDirection: 'row', marginTop: 15 }}>
               <Avatar.Image
                 source={{
-                  uri: image ? image : '000'
+                  uri: userData.profile_image ? userData.profile_image : '#000'
                 }}
                 size={60}
               />
               <View style={{ marginLeft: 15, flexDirection: 'column' }}>
-                <Title style={styles.title}>{first_name} {last_name}
+                <Title style={styles.title}>{userData.first_name} {userData.last_name}
                 </Title>
-                <Caption style={styles.caption}>{email}</Caption>
+                <Caption style={styles.caption}>{userData.email}</Caption>
               </View>
             </View>
 

@@ -4,7 +4,7 @@ import * as ImagePicker from 'expo-image-picker';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import * as FileSystem from 'expo-file-system';
 import service from 'src/libs/service/service'
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import userData from 'src/libs/user/userData';
 
 export default function profle({ navigation }) {
   const [image, setImage] = useState("src/assets/sorus.png");
@@ -15,11 +15,11 @@ export default function profle({ navigation }) {
   const [changeImg, setChangeImg] = useState(false)
 
   const setValues = async () => {
-    setImage(await AsyncStorage.getItem('profile_image'));
-    setFirst_name(await AsyncStorage.getItem('first_name'));
-    setLast_name(await AsyncStorage.getItem('last_name'));
-    setEmail(await AsyncStorage.getItem('email'));
-    setUsername(await AsyncStorage.getItem('username'));
+    setImage(userData.profile_image);
+    setFirst_name(userData.first_name);
+    setLast_name(userData.last_name);
+    setEmail(userData.email);
+    setUsername(userData.username);
   }
 
   useEffect(() => {
@@ -51,6 +51,7 @@ export default function profle({ navigation }) {
     service.patch('users/profile/update/', data)
       .then(() => {
         alert('Se han actualizado los datos')
+        userData.setValues(data)
       })
       .catch(err => {
         alert('No se pudo actualizar los datos')
@@ -87,7 +88,7 @@ export default function profle({ navigation }) {
       </View>
       <View style={styles.imgContainer}>
         <TouchableOpacity onPress={pickImage} >
-          <Image style={styles.image} source={{ uri: image }} />
+          <Image style={styles.image} source={{ uri: image ? image : '#000' }} />
         </TouchableOpacity>
       </View>
       <View style={styles.infoContainer}>

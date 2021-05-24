@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { StyleSheet, SafeAreaView, ActivityIndicator } from 'react-native'
 import Animated from 'react-native-reanimated'
 import Header from 'src/components/mainMenu/Header'
@@ -23,13 +23,15 @@ export default function Body({ navigation }) {
   }, [query, category])
 
   useEffect(() => {
-    timer()
+    let b = false;
+    const interval = setInterval(() => {
+      b = !b;
+      setTrigger(b)
+    }, 1000);
+    return () => {
+      clearInterval(interval)
+    }
   }, [])
-
-  const timer = b => {
-    setTrigger(!b)
-    setTimeout(() => timer(!b), 1000);
-  }
 
   const listUrl = 'offers/product/list/'
 

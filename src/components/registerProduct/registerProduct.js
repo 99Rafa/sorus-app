@@ -35,7 +35,7 @@ export default function RegisterProduct() {
     showMode('time');
   };
 
-  registerOffert = async () => {
+  registerOffer = async () => {
     let image64 = await FileSystem.readAsStringAsync(image, { encoding: 'base64' });
     image64 = `data:image/png;base64,${image64}`
     const data = {
@@ -137,7 +137,7 @@ export default function RegisterProduct() {
             </TextInput>
           </View>
           <View style={styles.content_4} >
-            <TouchableOpacity style={styles.buttonRegister} onPress={registerOffert}>
+            <TouchableOpacity style={styles.buttonRegister} onPress={registerOffer}>
               <Text style={styles.colorTextButton}>Registrar</Text>
             </TouchableOpacity>
           </View>
