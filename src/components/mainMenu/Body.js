@@ -7,64 +7,61 @@ import Pagination from 'src/components/mainMenu/Pagination'
 import service from 'src/libs/service/service'
 import Categories from "src/components/mainMenu/Categories";
 
-export default function Body({navigation}) {
+export default function Body({ navigation }) {
 
   const [_scroll_y,] = useState(new Animated.Value(0));
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
   const [currentPage, setCurrentPage] = useState(1)
   const [response, setResponse] = useState({})
-  const [query, setQuery] = useState('')
   const [trigger, setTrigger] = useState(true)
+  const [category, setCategory] = useState()
+  const [query, setQuery] = useState('')
 
   useEffect(() => {
     handleSearch()
-  }, [query])
+  }, [query, category])
 
   useEffect(() => {
     timer()
   }, [])
 
-  const timer = (b) => {
+  const timer = b => {
     setTrigger(!b)
     setTimeout(() => timer(!b), 1000);
   }
 
-  const handleSearch = async () => {
-    setLoading(true)
-    let offers = {}
-    if (query === "") {
-      offers = await service.get('offers/product/list/')
-    } else {
-      offers = await service.post('offers/product/query/', query)
+  const listUrl = 'offers/product/list/'
+
+  const handleSearch = () => {
+    let url = listUrl + '?';
+    if (category) {
+      url += `category=${category}&`
     }
-    if (!offers.error) {
-      setResponse(offers)
-      setProducts(offers.results)
-      setLoading(false)
-      setCurrentPage(1)
-    } else {
-      alert('Error al cargar ofertas')
+    if (query) {
+      url += `query=${query}`
     }
-    setLoading(false)
+    setCurrentPage(1)
+    makeRequest(url)
   }
 
-  const changePage = async i => {
+  const changePage = (params, i) => {
+    const url = listUrl + params
+    setCurrentPage(currentPage + i)
+    makeRequest(url)
+  }
+
+  const makeRequest = async url => {
     setLoading(true)
-    let offers = {}
-    if (query === "") {
-      offers = await service.get(`offers/product/list/?page=${currentPage + i}`)
-    } else {
-      offers = await service.post(`offers/product/query/?page=${currentPage + i}`, query)
-    }
-    if (!offers.error) {
-      setCurrentPage(currentPage + i)
-      setResponse(offers)
-      setProducts(offers.results)
-      setLoading(false)
-    } else {
-      alert('Error when loading offers')
-    }
+    await service.get(url)
+      .then(response => {
+        setResponse(response);
+        setProducts(response.results);
+      })
+      .catch(error => {
+        alert("Error al cargar las ofertas");
+        console.log(error);
+      });
     setLoading(false)
   }
 
@@ -82,7 +79,7 @@ export default function Body({navigation}) {
         scrollEventThrottle={5}
         onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: _scroll_y } } }])}
       >
-        <Categories />
+        <Categories category={category} setCategory={setCategory} />
         {
           loading
             ? <ActivityIndicator color="#000" size="large" style={{ marginTop: 30 }} />

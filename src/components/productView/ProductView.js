@@ -7,10 +7,13 @@ import { AntDesign } from '@expo/vector-icons'
 export default function ProductView({ route, navigation }) {
 
   const [item, setItem] = useState({})
+  const [price, setPrice] = useState(0)
 
   useEffect(() => {
-    setItem(route.params);
+    const item = route.params
+    setItem(item);
     navigation.setOptions({ headerShown: false });
+    setPrice(item.price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'))
   }, [])
 
   return <Container>
@@ -21,7 +24,7 @@ export default function ProductView({ route, navigation }) {
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Back>
               <AntDesign name="arrowleft" size={32} color="#FFF" style={styles.text_shadow} />
-              <Text style={[styles.text_shadow, { marginLeft: 10, fontSize: 20,fontFamily: 'PoppinsBold' }]}>Volver</Text>
+              <Text style={[styles.text_shadow, { marginLeft: 10, fontSize: 20, fontFamily: 'PoppinsBold' }]}>Volver</Text>
             </Back>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate("Review")}>
@@ -32,15 +35,15 @@ export default function ProductView({ route, navigation }) {
           <Text style={[{ fontSize: 32, fontFamily: 'PoppinsBold' }, styles.text_shadow]}>{item.name}</Text>
           <Divider />
           <Text style={[{ fontSize: 24, fontFamily: 'PoppinsBold' }, styles.text_shadow]}>Categoria</Text>
-          <Text style={[{ fontSize: 24, fontFamily: 'PoppinsBold' }, styles.text_shadow]}>$ {item.price}</Text>
+          <Text style={[{ fontSize: 24, fontFamily: 'PoppinsBold' }, styles.text_shadow]}>$ {price}</Text>
         </MainProduct>
         <Button>
-          <Text style={{ fontSize: 18,fontFamily: 'PoppinsBold' }}>IR A LA OFERTA</Text>
+          <Text style={{ fontSize: 18, fontFamily: 'PoppinsBold' }}>IR A LA OFERTA</Text>
         </Button>
       </SafeAreaView>
     </ProductBackground>
-    <DescriptionContainer style={ styles.border_description}>
-      <Text dark style={{ fontSize: 24, fontFamily: 'PoppinsBold'}}>Descripcion</Text>
+    <DescriptionContainer style={styles.border_description}>
+      <Text dark style={{ fontSize: 24, fontFamily: 'PoppinsBold' }}>Descripcion</Text>
       <Text dark >{item.description}</Text>
 
     </DescriptionContainer>

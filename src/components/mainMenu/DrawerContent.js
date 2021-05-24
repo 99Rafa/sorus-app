@@ -42,7 +42,6 @@ export default function DrawerContent({ navigation, ...props }) {
       setEmail(data.email)
       await AsyncStorage.setItem('profile_image', data.profile_image);
       setImage(data.profile_image);
-      console.log('Se ha obtenido la información');
     } else {
       console.log('No se pudo obtener los datos');
     }
@@ -174,7 +173,7 @@ const styles = StyleSheet.create({
   caption: {
     fontSize: 12.5,
     lineHeight: 14,
-    fontFamily:'Poppins'
+    fontFamily: 'Poppins'
   },
   row: {
     marginTop: 20,
