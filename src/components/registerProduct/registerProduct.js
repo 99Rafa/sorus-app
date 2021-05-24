@@ -1,20 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import { Image, View, Platform, StyleSheet, TouchableOpacity, TextInput, Text } from 'react-native';
+import * as FileSystem from 'expo-file-system';
 import * as ImagePicker from 'expo-image-picker';
+
+import { Image, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { faFileAlt, faMoneyCheckAlt, faSignature } from '@fortawesome/free-solid-svg-icons'
+
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faSignature, faMoneyCheckAlt, faFileAlt } from '@fortawesome/free-solid-svg-icons'
-import * as FileSystem from 'expo-file-system';
+import { Picker } from '@react-native-picker/picker';
 import service from 'src/libs/service/service';
 
 export default function RegisterProduct() {
-  const [image, setImage] = useState('src/assets/canasta.png');
+  const [image, setImage] = useState('empty');
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
+  const [category, setCategory] = useState('')
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -36,6 +40,14 @@ export default function RegisterProduct() {
   };
 
   registerOffer = async () => {
+    if (category.id === undefined) {
+      alert('Selecciona una categoria')
+      return
+    }
+    if (image === 'empty') {
+      alert('Selecciona una imagen valida')
+      return
+    }
     let image64 = await FileSystem.readAsStringAsync(image, { encoding: 'base64' });
     image64 = `data:image/png;base64,${image64}`
     const data = {
@@ -44,7 +56,8 @@ export default function RegisterProduct() {
       price: price,
       image: image64,
       start_date: new Date(),
-      end_date: date
+      end_date: date,
+      category: category.id
     }
     service.post('offers/product/register/', data)
       .then(_ => {
@@ -80,6 +93,41 @@ export default function RegisterProduct() {
     }
   };
 
+  const categories = [
+    {
+      name: 'Selecciona una categoria',
+      id: undefined
+    },
+    {
+      name: 'Electronica',
+      id: '1'
+    },
+    {
+      name: 'Celulares',
+      id: '2'
+    },
+    {
+      name: 'Moda',
+      id: '3'
+    },
+    {
+      name: 'Supermercado',
+      id: '4'
+    },
+    {
+      name: 'Accesorios',
+      id: '5'
+    },
+    {
+      name: 'Herramientas',
+      id: '6'
+    },
+    {
+      name: 'Juguetes',
+      id: '7'
+    },
+  ];
+
   return (
     <View style={styles.contentMain}>
       <View style={styles.content_1}>
@@ -109,32 +157,43 @@ export default function RegisterProduct() {
               />
             )}
           </View>
+          {/* Name */}
           <View style={styles.input}>
             <FontAwesomeIcon icon={faSignature} size={25} />
             <TextInput
               placeholder='Nombre del Producto'
-              style={{ marginLeft: 10, width: 250 }}
+              style={{ marginLeft: 10, width: 300, }}
               value={name}
               onChangeText={setName}>
             </TextInput>
           </View>
+          {/* Description */}
           <View style={styles.input2}>
             <FontAwesomeIcon icon={faFileAlt} size={25} />
-            <TextInput placeholder='Descripción' style={{ height: 80, textAlignVertical: 'top', width: 250, marginLeft: 10 }}
+            <TextInput placeholder='Descripción' style={{ height: 80, textAlignVertical: 'top', width: 300, marginLeft: 10, }}
               multiline
               value={description}
               onChangeText={setDescription}>
 
             </TextInput>
           </View>
-          <View style={styles.input}>
+          {/* Price */}
+          <View style={[styles.input, { top: 0, marginTop: 40 }]}>
             <FontAwesomeIcon icon={faMoneyCheckAlt} size={25} />
-            <TextInput placeholder='Precio' style={{ marginLeft: 10, width: 250 }}
+            <TextInput placeholder='Precio' style={{ marginLeft: 10, width: 300 }}
               value={price}
               onChangeText={setPrice}
               keyboardType="number-pad"
             >
             </TextInput>
+          </View>
+          {/* Category */}
+          <View>
+            <Picker style={{ height: 40, width: 300, color: '#868686' }}
+              selectedValue={category}
+              onValueChange={setCategory}>
+              {categories.map(item => <Picker.Item value={item} label={item.name} key={item.id + item.name} />)}
+            </Picker>
           </View>
           <View style={styles.content_4} >
             <TouchableOpacity style={styles.buttonRegister} onPress={registerOffer}>
@@ -198,7 +257,7 @@ const styles = StyleSheet.create({
   input: {
     display: 'flex',
     flexDirection: 'row',
-    width: 250,
+    width: 350,
     height: 40,
     padding: 5,
     borderBottomWidth: 1,
@@ -208,12 +267,12 @@ const styles = StyleSheet.create({
   input2: {
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'flex-start',
-    width: 250,
+    alignItems: 'center',
+    width: 350,
     height: 80,
     borderBottomWidth: 1,
     marginBottom: 40,
-    top: 40
+    top: 40,
   },
   imgCircle: {
     width: 200,
