@@ -237,10 +237,12 @@ const styles = StyleSheet.create({
 
   },
   content_3: {
-    flex: .1,
+    flex: .2,
     justifyContent: 'center',
     alignItems: 'center',
-    top: 60
+    top: 60,
+    paddingLeft: 30,
+    paddingRight: 30
   },
   imgcont: {
     alignItems: 'center',
@@ -257,7 +259,7 @@ const styles = StyleSheet.create({
   input: {
     display: 'flex',
     flexDirection: 'row',
-    width: 350,
+    width: 300,
     height: 40,
     padding: 5,
     borderBottomWidth: 1,
@@ -268,7 +270,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    width: 350,
+    width: 300,
     height: 80,
     borderBottomWidth: 1,
     marginBottom: 40,

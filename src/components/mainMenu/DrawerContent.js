@@ -4,10 +4,33 @@ import { Avatar, Title, Caption, Paragraph, Drawer } from 'react-native-paper';
 import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Icons from "react-native-vector-icons/FontAwesome5";
 import service from 'src/libs/service/service';
 import userData from 'src/libs/user/userData';
+import Dialog from "react-native-dialog";
 
 export default function DrawerContent({ navigation, ...props }) {
+  const [visible, setVisible] = useState(false);
+
+  const showDialog = () => {
+    setVisible(true);
+  };
+
+  const handleCancel = () => {
+    setVisible(false);
+  };
+
+  const handlePay = () => {
+    service.get('users/profile/subscription/')
+      .then(response => {
+        userData.setValues(response.data)
+      })
+      .catch(error => {
+        console.log('No se pudo guardar la subscripción')
+        console.log(error)
+      })
+    setVisible(false);
+  };
 
   const logout = () => {
     service.post('users/logout/')
@@ -116,6 +139,19 @@ export default function DrawerContent({ navigation, ...props }) {
               onPress={() => { navigation.navigate('RegisterProduct') }}
             />
 
+            <Dialog.Container visible={visible}>              
+              <Dialog.Title>{'Subscripción'} </Dialog.Title>              
+              <Dialog.Description>
+              <Icons name='paypal' size={50} />          
+                {' Se hara un cobro de $100 por PayPal'}
+                {'\nla cual incluye lo siguiente: \n\n'} 
+                <Icons name='check-circle' size={15} />{' Subida ilimitada de promociones \n'}
+                <Icons name='check-circle' size={15} />{' Aparacer en el Top de Ofertas'}
+              </Dialog.Description>
+              <Dialog.Button label="Cancelar" onPress={handleCancel} />
+              <Dialog.Button label="Pagar" onPress={handlePay} />
+            </Dialog.Container>
+
             <DrawerItem
               icon={({ color, size }) => (
                 <Icon
@@ -124,8 +160,8 @@ export default function DrawerContent({ navigation, ...props }) {
                   size={size}
                 />
               )}
-              label="Support"
-              onPress={() => { }}
+              label="Subscripción"
+              onPress={showDialog}
             />
           </Drawer.Section>
 
