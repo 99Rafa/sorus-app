@@ -7,9 +7,12 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { updateProduct } from 'src/libs/service/registerProducts/updateOfferService';
 import { getInfoOffer } from 'src/libs/service/registerProducts/getInfoOfferService';
 import * as FileSystem from 'expo-file-system';
+import CheckBox from '@react-native-community/checkbox';
 
 
 export default function updateOffer({ navigation }) {
+    const [toggleCheckBox, setToggleCheckBox] = useState(false)
+    const [stock, setStock] = useState("");
     const [selectedItem,] = useState({});
     const [category, setCategory] = useState({});
     const [offers, setOffers] = useState([])
@@ -243,6 +246,28 @@ export default function updateOffer({ navigation }) {
                         </View>
                     </View>
                     <View style={styles.form}>
+                        <Text style={styles.textoPrincipal}>Stock</Text>
+                        <View style={styles.input}>
+                            <TextInput
+                                value={stock}
+                                onChangeText={setStock}
+                                placeholder=''
+                                keyboardType="number-pad"
+                                placeholderTextColor="#868686"
+                                style={{ marginLeft: 10, width: 250 }}>
+                            </TextInput>
+                        </View>
+                    </View>
+                    <View style={styles.form_2}>
+                        <Text style={styles.textoPrincipal}>¿Es venta?</Text>
+                        <CheckBox
+                            disabled={false}
+                            value={toggleCheckBox}
+                            onCheckColor='#4D194D'
+                            onValueChange={(newValue) => setToggleCheckBox(newValue)}
+                        />
+                    </View>
+                    <View style={styles.form}>
                         <Text style={styles.textoPrincipal}>Categoria</Text>
                         <Picker style={styles.style_picker2}
                             selectedValue={category}
@@ -277,7 +302,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     cont_2: {
-        flex: 2.4,
+        flex: 2.8,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -332,13 +357,19 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0, 0, 0, 0.09)'
     },
     form: {
-        marginTop: 15
+        marginTop: 3
+    },
+    form_2: {
+        marginTop: 3,
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
     },
     button: {
         width: 300,
         height: 40,
         backgroundColor: '#4D194D',
-        marginTop: 20,
+        marginTop: 5,
         borderRadius: 20,
         shadowOpacity: 0.41,
         shadowRadius: 9.11,

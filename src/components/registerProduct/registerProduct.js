@@ -9,12 +9,15 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { Picker } from '@react-native-picker/picker';
 import service from 'src/libs/service/service';
+import CheckBox from '@react-native-community/checkbox';
 
 export default function RegisterProduct() {
+  const [toggleCheckBox, setToggleCheckBox] = useState(false)
   const [image, setImage] = useState('empty');
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
+  const [stock, setStock] = useState("");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
@@ -57,7 +60,9 @@ export default function RegisterProduct() {
       image: image64,
       start_date: new Date(),
       end_date: date,
-      category: category.id
+      category: category.id,
+      stock: stock,
+      is_offer: toggleCheckBox
     }
     service.post('offers/product/register/', data)
       .then(_ => {
@@ -170,7 +175,7 @@ export default function RegisterProduct() {
           {/* Description */}
           <View style={styles.input2}>
             <FontAwesomeIcon icon={faFileAlt} size={25} />
-            <TextInput placeholder='Descripción' style={{ height: 80, textAlignVertical: 'top', width: 300, marginLeft: 10, }}
+            <TextInput placeholder='Descripción' style={{ height: 50, textAlignVertical: 'top', width: 300, marginLeft: 10, }}
               multiline
               value={description}
               onChangeText={setDescription}>
@@ -178,7 +183,7 @@ export default function RegisterProduct() {
             </TextInput>
           </View>
           {/* Price */}
-          <View style={[styles.input, { top: 0, marginTop: 40 }]}>
+          <View style={[styles.input, { top: 0, marginTop: 20 }]}>
             <FontAwesomeIcon icon={faMoneyCheckAlt} size={25} />
             <TextInput placeholder='Precio' style={{ marginLeft: 10, width: 300 }}
               value={price}
@@ -187,9 +192,29 @@ export default function RegisterProduct() {
             >
             </TextInput>
           </View>
+          {/* Stock  */}
+          <View style={[styles.input, { top: 0, marginTop: -10 }]}>
+            <FontAwesomeIcon icon={faFileAlt} size={25} />
+            <TextInput placeholder='Stock' style={{ marginLeft: 10, width: 300 }}
+              value={price}
+              onChangeText={setStock}
+              keyboardType="number-pad"
+            >
+            </TextInput>
+          </View>
+          {/* Is Offer  */}
+          <View style={[styles.input_2, { top: 0, marginTop: -10 }]}>
+            <Text style={{ marginRight: 10 }}>¿Es venta?</Text>
+            <CheckBox
+              disabled={false}
+              value={toggleCheckBox}
+              onCheckColor='#4D194D'
+              onValueChange={(newValue) => setToggleCheckBox(newValue)}
+            />
+          </View>
           {/* Category */}
           <View>
-            <Picker style={{ height: 40, width: 300, color: '#868686' }}
+            <Picker style={{ height: 20, width: 300, color: '#868686' }}
               selectedValue={category}
               onValueChange={setCategory}>
               {categories.map(item => <Picker.Item value={item} label={item.name} key={item.id + item.name} />)}
@@ -240,9 +265,7 @@ const styles = StyleSheet.create({
     flex: .2,
     justifyContent: 'center',
     alignItems: 'center',
-    top: 60,
-    paddingLeft: 30,
-    paddingRight: 30
+    top: 84
   },
   imgcont: {
     alignItems: 'center',
@@ -264,7 +287,17 @@ const styles = StyleSheet.create({
     padding: 5,
     borderBottomWidth: 1,
     marginBottom: 40,
-    top: 50
+    top: 60
+  },
+  input_2: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 350,
+    height: 40,
+    padding: 5,
+    top: 60
   },
   input2: {
     display: 'flex',
@@ -274,7 +307,7 @@ const styles = StyleSheet.create({
     height: 80,
     borderBottomWidth: 1,
     marginBottom: 40,
-    top: 40,
+    top: 20,
   },
   imgCircle: {
     width: 200,
@@ -313,11 +346,11 @@ const styles = StyleSheet.create({
   buttonDate: {
     display: 'flex',
     flexDirection: 'row',
-    top: 40
+    top: 50
   },
   buttonRegister: {
     backgroundColor: '#fff',
-    top: 60,
+    top: 30,
     width: 250,
     height: 40,
     borderRadius: 20,

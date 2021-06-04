@@ -53,7 +53,7 @@ export default function ProductView({ route, navigation }) {
     <DescriptionContainer style={styles.border_description}>
       <Text dark style={{ fontSize: 24, fontFamily: 'PoppinsBold' }}>Descripcion</Text>
       <Text dark >{item.description}</Text>
-
+      <Text dark >{item.stock}</Text>
     </DescriptionContainer>
   </Container>;
 }
