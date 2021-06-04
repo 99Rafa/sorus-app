@@ -138,6 +138,30 @@ export default function DrawerContent({ navigation, ...props }) {
               onPress={() => { navigation.navigate('RegisterProduct') }}
             />
 
+            <DrawerItem
+              icon={({ color, size }) => (
+                <Icon
+                  name="clipboard-check-outline"
+                  color={color}
+                  size={size}
+                />
+              )}
+              label="Mis Ventas"
+              onPress={() => { navigation.navigate('Shell') }}
+            />     
+
+            <DrawerItem
+              icon={({ color, size }) => (
+                <Icon
+                  name="shopping-outline"
+                  color={color}
+                  size={size}
+                />
+              )}
+              label="Mis Compras"
+              onPress={() => { navigation.navigate('Buy') }}
+            />            
+
             <Dialog.Container visible={visible}>
               <Dialog.Title>Subscripción</Dialog.Title>
               <Dialog.Description>
