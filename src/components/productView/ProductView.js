@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { SafeAreaView, StatusBar, TouchableOpacity, StyleSheet } from 'react-native';
 import styled from 'styled-components'
 import { AntDesign } from '@expo/vector-icons'
+import { View } from 'react-native';
 
 export default function ProductView({ route, navigation }) {
 
@@ -22,6 +23,14 @@ export default function ProductView({ route, navigation }) {
       type: 'product'
     }
     navigation.navigate('Payment', itemData)
+  }
+
+  const handleOpinions = () => {
+    const itemData = {
+      ...item,
+      type: 'product'
+    }
+    navigation.navigate('Opinions', itemData)
   }
 
   return <Container>
@@ -53,7 +62,12 @@ export default function ProductView({ route, navigation }) {
     <DescriptionContainer style={styles.border_description}>
       <Text dark style={{ fontSize: 24, fontFamily: 'PoppinsBold' }}>Descripcion</Text>
       <Text dark >{item.description}</Text>
-      <Text dark >{item.stock}</Text>
+      <Text dark >Stock Disponible: {item.stock}</Text>
+      <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
+        <TouchableOpacity onPress={handleOpinions} style={styles.button}>
+          <Text style={{ fontSize: 13, fontFamily: 'PoppinsBold' }}>Opiniones</Text>
+        </TouchableOpacity>
+      </View>
     </DescriptionContainer>
   </Container>;
 }
@@ -65,7 +79,19 @@ const styles = StyleSheet.create({
     textShadowColor: '#000',
   },
   border_description: {
-    flex: 1
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  button:{
+    backgroundColor: '#312244',
+    paddingTop: 5,
+    paddingBottom: 6,
+    paddingLeft: 15,
+    paddingRight: 15,
+    borderRadius: 20
   }
 })
 
@@ -118,7 +144,6 @@ const Button = styled.TouchableOpacity`
 `;
 
 const DescriptionContainer = styled.View`
-    margin-top: -30px;
     padding: 32px;
     background-color: #e9e9e9;
     border-top-left-radius: 24px;
