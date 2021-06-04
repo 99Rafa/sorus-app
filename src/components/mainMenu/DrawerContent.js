@@ -12,6 +12,21 @@ import Dialog from "react-native-dialog";
 export default function DrawerContent({ navigation, ...props }) {
   const [visible, setVisible] = useState(false);
 
+  useEffect(() => {
+    GetInfoUser();
+  }, []);
+
+  GetInfoUser = () => {
+    service.get('users/profile/info/')
+      .then(response => {
+        userData.setValues(response.data)
+      })
+      .catch(error => {
+        console.log('No se pudieron cargar los datos del usuario')
+        console.log(error)
+      })
+  }
+
   const showDialog = () => {
     setVisible(true);
   };
@@ -21,14 +36,13 @@ export default function DrawerContent({ navigation, ...props }) {
   };
 
   const handlePay = () => {
-    service.get('users/profile/subscription/')
-      .then(response => {
-        userData.setValues(response.data)
-      })
-      .catch(error => {
-        console.log('No se pudo guardar la subscripción')
-        console.log(error)
-      })
+    const data = {
+      id: 2,
+      type: 'subscription',
+      name: "subscription",
+      price: 100
+    }
+    navigation.navigate('Payment', data)
     setVisible(false);
   };
 
@@ -42,21 +56,6 @@ export default function DrawerContent({ navigation, ...props }) {
       .catch(err => {
         alert('Error al iniciar sesión')
         console.log(err)
-      })
-  }
-
-  useEffect(() => {
-    GetInfoUser();
-  }, []);
-
-  GetInfoUser = () => {
-    service.get('users/profile/info/')
-      .then(response => {
-        userData.setValues(response.data)
-      })
-      .catch(error => {
-        console.log('No se pudieron cargar los datos del usuario')
-        console.log(error)
       })
   }
 
@@ -139,12 +138,12 @@ export default function DrawerContent({ navigation, ...props }) {
               onPress={() => { navigation.navigate('RegisterProduct') }}
             />
 
-            <Dialog.Container visible={visible}>              
-              <Dialog.Title>{'Subscripción'} </Dialog.Title>              
+            <Dialog.Container visible={visible}>
+              <Dialog.Title>Subscripción</Dialog.Title>
               <Dialog.Description>
-              <Icons name='paypal' size={50} />          
-                {' Se hara un cobro de $100 por PayPal'}
-                {'\nla cual incluye lo siguiente: \n\n'} 
+                <Icons name='paypal' size={50} />
+                {' Se hara un cobro de $100 por PayPal\n'}
+                {'la cual incluye lo siguiente: \n\n'}
                 <Icons name='check-circle' size={15} />{' Subida ilimitada de promociones \n'}
                 <Icons name='check-circle' size={15} />{' Aparacer en el Top de Ofertas'}
               </Dialog.Description>
