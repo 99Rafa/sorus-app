@@ -12,6 +12,7 @@ import RegisterProduct from "src/components/registerProduct/registerProduct";
 import Profile from "src/components/profile/profle";
 import ProductView from "src/components/productView/ProductView";
 import Register from "src/components/registerUser/registerUser";
+import PaymentScreen from "src/components/payment/PaymentScreen";
 
 const Stack = createStackNavigator()
 
@@ -39,6 +40,7 @@ export default function App() {
         <Stack.Screen name="RegisterProduct" component={RegisterProduct} />
         <Stack.Screen name="Profile" component={Profile} />
         <Stack.Screen name="UpdateOffer" component={UpdateOffer} />
+        <Stack.Screen name="Payment" component={PaymentScreen} />
 
       </Stack.Navigator>
       <StatusBar style="auto" />

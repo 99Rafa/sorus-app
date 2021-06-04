@@ -16,6 +16,14 @@ export default function ProductView({ route, navigation }) {
     setPrice(item.price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'))
   }, [])
 
+  const handlePayment = () => {
+    const itemData = {
+      ...item,
+      type: 'product'
+    }
+    navigation.navigate('Payment', itemData)
+  }
+
   return <Container>
     <StatusBar barStyle='light-content' />
     <ProductBackground source={{ uri: item.image }}>
@@ -37,8 +45,8 @@ export default function ProductView({ route, navigation }) {
           <Text style={[{ fontSize: 24, fontFamily: 'PoppinsBold' }, styles.text_shadow]}>Categoria</Text>
           <Text style={[{ fontSize: 24, fontFamily: 'PoppinsBold' }, styles.text_shadow]}>$ {price}</Text>
         </MainProduct>
-        <Button>
-          <Text style={{ fontSize: 18, fontFamily: 'PoppinsBold' }}>IR A LA OFERTA</Text>
+        <Button onPress={handlePayment}>
+          <Text style={{ fontSize: 18, fontFamily: 'PoppinsBold' }}>Comprar</Text>
         </Button>
       </SafeAreaView>
     </ProductBackground>

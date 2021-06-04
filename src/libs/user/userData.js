@@ -1,6 +1,7 @@
 class userData {
   static instance = new userData();
 
+  id = ''
   username = '';
   first_name = '';
   last_name = '';
@@ -8,6 +9,9 @@ class userData {
   email = '';
 
   setValues(user) {
+    if (user.id) {
+      this.id = user.id
+    }
     if (user.username) {
       this.username = user.username
     }

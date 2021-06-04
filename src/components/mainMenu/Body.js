@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import { StyleSheet, SafeAreaView, ActivityIndicator } from 'react-native'
 import Animated from 'react-native-reanimated'
 import Header from 'src/components/mainMenu/Header'
