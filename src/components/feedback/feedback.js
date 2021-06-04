@@ -65,7 +65,7 @@ export default function ReviewScreen({ route, navigation }) {
         style={styles.button}
         onPress={sendComment}
       >
-        <Text>Guardar comentario</Text>
+        <Text style={{ color: '#fff' }}>Guardar comentario</Text>
       </TouchableOpacity>
     </View>
   )
@@ -91,13 +91,17 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top'
   },
   button: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 10,
-    backgroundColor: 'gray',
-    width: '90%',
+    width: 300,
     height: 40,
+    backgroundColor: '#4D194D',
+    marginTop: 20,
+    borderRadius: 20,
+    shadowOpacity: 0.41,
+    shadowRadius: 9.11,
+    elevation: 14,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   ratingContainer: {
     alignSelf: "flex-start",
