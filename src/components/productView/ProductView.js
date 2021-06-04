@@ -45,15 +45,23 @@ export default function ProductView({ route, navigation }) {
           <Text style={[{ fontSize: 24, fontFamily: 'PoppinsBold' }, styles.text_shadow]}>Categoria</Text>
           <Text style={[{ fontSize: 24, fontFamily: 'PoppinsBold' }, styles.text_shadow]}>$ {price}</Text>
         </MainProduct>
-        <Button onPress={handlePayment}>
-          <Text style={{ fontSize: 18, fontFamily: 'PoppinsBold' }}>Comprar</Text>
-        </Button>
+        {
+          !item.is_offer
+            ? <Button onPress={handlePayment}>
+              <Text style={{ fontSize: 18, fontFamily: 'PoppinsBold' }}>Comprar</Text>
+            </Button>
+            : null
+        }
       </SafeAreaView>
     </ProductBackground>
     <DescriptionContainer style={styles.border_description}>
       <Text dark style={{ fontSize: 24, fontFamily: 'PoppinsBold' }}>Descripcion</Text>
+      {
+        !item.is_offer
+          ? <Text dark >Stock: {item.stock}</Text>
+          : null
+      }
       <Text dark >{item.description}</Text>
-      <Text dark >{item.stock}</Text>
     </DescriptionContainer>
   </Container>;
 }

@@ -17,7 +17,7 @@ export default function RegisterProduct() {
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
-  const [stock, setStock] = useState("");
+  const [stock, setStock] = useState(1);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
@@ -196,7 +196,7 @@ export default function RegisterProduct() {
           <View style={[styles.input, { top: 0, marginTop: -10 }]}>
             <FontAwesomeIcon icon={faFileAlt} size={25} />
             <TextInput placeholder='Stock' style={{ marginLeft: 10, width: 300 }}
-              value={price}
+              value={stock}
               onChangeText={setStock}
               keyboardType="number-pad"
             >

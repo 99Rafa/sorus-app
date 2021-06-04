@@ -19,11 +19,12 @@ export default function Body({ navigation }) {
   const [trigger, setTrigger] = useState(true)
   const [category, setCategory] = useState()
   const [query, setQuery] = useState('')
+  const [hot, setHot] = useState(false)
 
   useEffect(() => {
     handleSearch()
     makeRequestTop()
-  }, [query, category])
+  }, [query, category, hot])
 
   useEffect(() => {
     let b = false;
@@ -40,6 +41,9 @@ export default function Body({ navigation }) {
 
   const handleSearch = () => {
     let url = listUrl + '?';
+    if (hot) {
+      url += `hot=1&`
+    }
     if (category) {
       url += `category=${category}&`
     }
@@ -100,44 +104,38 @@ export default function Body({ navigation }) {
         onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: _scroll_y } } }])}
       >
         <Categories category={category} setCategory={setCategory} />
-        <Text style={styles.titles}>Top</Text>
         {
           loading
             ? <ActivityIndicator color="#000" size="large" style={{ marginTop: 30 }} />
             : <>
+              <Text style={styles.titles}>Top</Text>
               {productsTop.map((item) => <ProductItem item={item} key={item.name + item.price} handlePress={handlePress} trigger={trigger} />)}
-
             </>
         }
-        <View style={styles.top}>
-          <Text style={styles.titles}>Generales</Text>
-          <TouchableOpacity>
-            <View
-              style={{
-                width: 50,
-                height: 50,
-                borderRadius: 20,
-                alignItems: "center",
-                justifyContent: "center",
-                backgroundColor: selected ? '#006466' : '#312244',
-                marginLeft: 10
-              }}
-            >
-              <Icon name={'hotjar'} size={25} color='#fff' />
-              <Text
-                style={{
-                  color: "#fff",
-                  fontSize: 12,
-                  fontFamily: 'Poppins'
-                }}
-              >{'Hot'}</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
+
         {
           loading
             ? <ActivityIndicator color="#000" size="large" style={{ marginTop: 30 }} />
             : <>
+              <View style={styles.top}>
+                <Text style={styles.titles}>Generales</Text>
+                <TouchableOpacity onPress={() => setHot(!hot)}>
+                  <View
+                    style={{
+                      width: 50,
+                      height: 50,
+                      borderRadius: 20,
+                      alignItems: "center",
+                      justifyContent: "center",
+                      backgroundColor: hot ? '#006466' : '#312244',
+                      marginLeft: 10
+                    }}
+                  >
+                    <Icon name={'hotjar'} size={25} color='#fff' />
+                    <Text style={{ color: "#fff", fontSize: 12, fontFamily: 'Poppins' }}>Hot</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
               {products.map((item) => <ProductItem item={item} key={item.name + item.price} handlePress={handlePress} trigger={trigger} />)}
 
               <Pagination response={response} changePage={changePage} currentPage={currentPage} />

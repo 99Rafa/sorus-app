@@ -11,8 +11,6 @@ import CheckBox from '@react-native-community/checkbox';
 
 
 export default function updateOffer({ navigation }) {
-    const [toggleCheckBox, setToggleCheckBox] = useState(false)
-    const [stock, setStock] = useState("");
     const [selectedItem,] = useState({});
     const [category, setCategory] = useState({});
     const [offers, setOffers] = useState([])
@@ -25,6 +23,8 @@ export default function updateOffer({ navigation }) {
     const [description, setDescription] = useState("");
     const [price, setPrice] = useState("");
     const [changeImg, setChangeImg] = useState(false);
+    const [stock, setStock] = useState("");
+    const [isOffer, setIsOffer] = useState(false)
 
     useEffect(() => {
         GetInfoOfer();
@@ -53,6 +53,8 @@ export default function updateOffer({ navigation }) {
             name,
             description,
             price,
+            stock,
+            is_offer: isOffer,
             image: changeImg ? image64 : image,
             end_date: date,
             id: id,
@@ -121,6 +123,8 @@ export default function updateOffer({ navigation }) {
         setPrice(item.price.toString())
         setId(item.id.toString());
         compareIdCategory(item.category);
+        setStock(item.stock.toString());
+        setIsOffer(item.is_offer);
     }
 
     const compareIdCategory = (item) => {
@@ -259,12 +263,12 @@ export default function updateOffer({ navigation }) {
                         </View>
                     </View>
                     <View style={styles.form_2}>
-                        <Text style={styles.textoPrincipal}>¿Es venta?</Text>
+                        <Text style={styles.textoPrincipal}>¿Es oferta?</Text>
                         <CheckBox
                             disabled={false}
-                            value={toggleCheckBox}
+                            value={isOffer}
                             onCheckColor='#4D194D'
-                            onValueChange={(newValue) => setToggleCheckBox(newValue)}
+                            onValueChange={(newValue) => setIsOffer(newValue)}
                         />
                     </View>
                     <View style={styles.form}>
