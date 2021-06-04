@@ -35,7 +35,7 @@ export default function ProductView({ route, navigation }) {
               <Text style={[styles.text_shadow, { marginLeft: 10, fontSize: 20, fontFamily: 'PoppinsBold' }]}>Volver</Text>
             </Back>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate("Review")}>
+          <TouchableOpacity onPress={() => navigation.navigate("Review", item)}>
             <AntDesign name="star" size={32} color="#FFF" style={[{ marginTop: 30 }, styles.text_shadow]} />
           </TouchableOpacity>
         </MenuBar>

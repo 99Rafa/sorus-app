@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   TextInput,
   View,
@@ -7,36 +7,35 @@ import {
   TouchableOpacity
 } from 'react-native'
 import Stars from "src/components/feedback/star";
+import service from 'src/libs/service/service';
 
-export default function ReviewScreen() {
+export default function ReviewScreen({ route, navigation }) {
 
+  const [item, setItem] = useState({});
   const [title, setTitle] = useState("");
   const [comment, setComment] = useState("");
   const [rate, setRate] = useState(0);
 
-  const sendComment = () => {
-    const data = {
-      title,
-      comment,
-      rate,
-      product: 1,
-      user: 1
-    }
+  useEffect(() => {
+    setItem(route.params);
+    navigation.setOptions({ title: 'Comentario' })
+  }, [])
 
-    fetch('http://10.0.2.2:8000/offers/review/create/', {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
+  const sendComment = () => {
+    service.post('offers/review/create/', {
+      product: item.id,
+      rate: rate,
+      title: title,
+      comment: comment
     })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error()
-        }
-        alert('Review guardado');
+      .then(() => {
+        alert('Gracias por tu comentario');
+        navigation.goBack();
       })
-      .catch(_ => alert('Hubo un error al guardar la review'));
+      .catch(err => {
+        alert('Error al guardar el comentario');
+        console.log(err);
+      })
   }
 
   return (

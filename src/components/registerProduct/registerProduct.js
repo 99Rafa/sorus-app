@@ -17,7 +17,7 @@ export default function RegisterProduct() {
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
-  const [stock, setStock] = useState(1);
+  const [stock, setStock] = useState('1');
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
