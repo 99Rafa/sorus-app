@@ -44,13 +44,17 @@ export default function Login({ navigation }) {
     navigation.navigate("Register");
   }
 
+  const Forget = () => {
+    navigation.navigate("Forget");
+  }
+
   return (
     <View style={styles.container}>
       <Image style={styles.image} source={require("src/assets/sorus.png")} />
       <Text style={styles.text}>SORUS</Text>
 
       {/* InputEmail */}
-      <Text style={styles.textE}>Correo electrónico</Text>
+      <Text style={styles.textE}>Nombre de usuario</Text>
       <View style={styles.inputViewEmail}>
         <TextInput
           value={email}
@@ -76,7 +80,7 @@ export default function Login({ navigation }) {
       </View>
 
       {/* Boton olvide contraseña */}
-      <TouchableOpacity style={{ alignSelf: "flex-end", paddingRight: 40 }}>
+      <TouchableOpacity style={{ alignSelf: "flex-end", paddingRight: 40 }} onPress={Forget}>
         <Text style={styles.forgot_button}>Olvide la contraseña</Text>
       </TouchableOpacity>
 

@@ -133,27 +133,28 @@ const styles = StyleSheet.create({
     color: "#fff",
     top: 50,
     marginLeft: 40,
-    paddingBottom: 10,
-    marginBottom: 10,
+    paddingBottom:5,
+    marginBottom: 8,
     borderBottomColor: "#fff",
     borderBottomWidth: 5,
   },
   title: {
     alignSelf: "flex-start",
     marginLeft: 40,
-    top: 50,
+    top: 44,
     color: "#fff",
+    fontWeight: "bold",
   },
   form: {
     justifyContent: "center",
-    top: 50
+    top: 45
   },
   textinput: {
     borderRadius: 15,
     alignSelf: "stretch",
-    height: 40,
+    height: 35,
     width: 320,
-    marginBottom: 20,
+    marginBottom: 18,
     padding: 10,
     backgroundColor: "#fff",
     color: "#000",
@@ -170,11 +171,13 @@ const styles = StyleSheet.create({
   btntext: {
     borderRadius: 15,
     color: "#fff",
+    fontWeight: "bold",
+    fontSize: 18
   },
   icon: {
     display: "flex",
     alignItems: "flex-end",
-    top: -50,
+    top: -45,
     marginRight: 10,
     marginLeft: 280,
     width: 25,

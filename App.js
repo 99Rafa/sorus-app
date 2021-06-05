@@ -12,6 +12,7 @@ import RegisterProduct from "src/components/registerProduct/registerProduct";
 import Profile from "src/components/profile/profle";
 import ProductView from "src/components/productView/ProductView";
 import Register from "src/components/registerUser/registerUser";
+import Forget from "src/components/forgetPassword/forgetPassword";
 
 const Stack = createStackNavigator()
 
@@ -33,6 +34,7 @@ export default function App() {
         <Stack.Screen name="StartUp" component={StartUpScreen} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Register" component={Register} />
+        <Stack.Screen name="Forget" component={Forget} />
         <Stack.Screen name="Menu" component={MenuStack} />
         <Stack.Screen name="ProductView" component={ProductView} />
         <Stack.Screen name="Review" component={ReviewScreen} />
