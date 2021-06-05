@@ -37,9 +37,7 @@ export default function PaymentScreen({ route, navigation }) {
       setSuccess(true)
     } else if (data.title === "cancel" | data.title === 'Error') {
       setCancel(true)
-    } else {
     }
-    console.log(data.title)
   }
 
   const handlePress = () => {

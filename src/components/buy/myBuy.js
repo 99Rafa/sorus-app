@@ -1,19 +1,26 @@
-import { faShieldAlt } from '@fortawesome/free-solid-svg-icons'
 import React, { useState, useEffect } from 'react'
 import { View, Text, ScrollView, StyleSheet, Image, ActivityIndicator } from 'react-native'
+import service from 'src/libs/service/service'
 
 
 export default function mySell() {
+
   const [sell, setSell] = useState([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     makeRequest()
-  })
+  }, [])
 
   const makeRequest = async () => {
     setLoading(true)
-    //Logicaaaa
+    service.get('sales/buys/')
+      .then(res => {
+        setSell(res)
+      })
+      .catch(err => {
+
+      })
     setLoading(false)
   }
 
@@ -25,10 +32,10 @@ export default function mySell() {
           loading
             ? <ActivityIndicator color="#000" size="large" style={{ marginTop: 30 }} />
             : <>
-              {sell.map(item => <View>
+              {sell.map(item => <View key={item.name + item.price}>
                 <Image source={{ uri: item.image }} style={styles.imagenes} />
                 <Text style={styles.description}>{item.name}</Text>
-                <Text style={styles.description2}>{item.vendedor}</Text>
+                <Text style={styles.description2}>{item.price}</Text>
               </View>)}
             </>
         }
@@ -42,6 +49,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
+    paddingBottom: 30
   },
   imagenes: {
     width: 350,

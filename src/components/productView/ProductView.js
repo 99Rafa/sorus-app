@@ -26,11 +26,7 @@ export default function ProductView({ route, navigation }) {
   }
 
   const handleOpinions = () => {
-    const itemData = {
-      ...item,
-      type: 'product'
-    }
-    navigation.navigate('Opinions', itemData)
+    navigation.navigate('Opinions', item)
   }
 
   return <Container>
@@ -67,11 +63,10 @@ export default function ProductView({ route, navigation }) {
       <Text dark style={{ fontSize: 24, fontFamily: 'PoppinsBold' }}>Descripcion</Text>
       {
         !item.is_offer
-          ? <Text dark >Stock: {item.stock}</Text>
+          ? <Text dark >Stock Disponible: {item.stock}</Text>
           : null
       }
       <Text dark >{item.description}</Text>
-      <Text dark >Stock Disponible: {item.stock}</Text>
       <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
         <TouchableOpacity onPress={handleOpinions} style={styles.button}>
           <Text style={{ fontSize: 13, fontFamily: 'PoppinsBold' }}>Opiniones</Text>
@@ -91,7 +86,6 @@ const styles = StyleSheet.create({
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'center',
     alignItems: 'center'
   },
   button: {

@@ -25,7 +25,7 @@ export default function mySell() {
           loading
             ? <ActivityIndicator color="#000" size="large" style={{ marginTop: 30 }} />
             : <>
-              {sell.map(item => <View>
+              {sell.map(item => <View key={item.name}>
                 <Image source={{ uri: item.image }} style={styles.imagenes} />
                 <Text style={styles.description}>{item.name}</Text>
                 <Text style={styles.description2}>{item.vendedor}</Text>
