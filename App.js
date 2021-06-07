@@ -13,8 +13,8 @@ import Profile from "src/components/profile/profle";
 import ProductView from "src/components/productView/ProductView";
 import Register from "src/components/registerUser/registerUser";
 import PaymentScreen from "src/components/payment/PaymentScreen";
-import SellScreen from "src/components/sell/mySell";
-import BuyScreen from "src/components/buy/myBuy.js";
+import SellScreen from "src/components/sell/Sells";
+import BuyScreen from "src/components/buy/Buys.js";
 import OpinionScreen from "src/components/feedback/opinions.js";
 
 const Stack = createStackNavigator()
@@ -33,8 +33,8 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        
-        
+
+
         <Stack.Screen name="StartUp" component={StartUpScreen} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Register" component={Register} />
@@ -45,7 +45,7 @@ export default function App() {
         <Stack.Screen name="Profile" component={Profile} />
         <Stack.Screen name="UpdateOffer" component={UpdateOffer} />
         <Stack.Screen name="Payment" component={PaymentScreen} />
-        <Stack.Screen name="Shell" component={SellScreen} />
+        <Stack.Screen name="Sell" component={SellScreen} />
         <Stack.Screen name="Buy" component={BuyScreen} />
         <Stack.Screen name="Opinions" component={OpinionScreen} />
 

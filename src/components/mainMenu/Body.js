@@ -108,31 +108,31 @@ export default function Body({ navigation }) {
           loading
             ? <ActivityIndicator color="#000" size="large" style={{ marginTop: 30 }} />
             : <>
-              <Text style={styles.titles}>Top</Text>
-              {productsTop.map((item) => <ProductItem item={item} key={item.name + item.price} handlePress={handlePress} trigger={trigger} />)}
-            </>
-        }
-
-        {
-          loading
-            ? <ActivityIndicator color="#000" size="large" style={{ marginTop: 30 }} />
-            : <>
+              {
+                productsTop.length > 0
+                  ? <>
+                    <Text style={styles.titles}>Top</Text>
+                    {productsTop.map((item) => <ProductItem item={item} key={item.name + item.price} handlePress={handlePress} trigger={trigger} />)}
+                  </>
+                  : null
+              }
               <View style={styles.top}>
                 <Text style={styles.titles}>Generales</Text>
                 <TouchableOpacity onPress={() => setHot(!hot)}>
                   <View
                     style={{
-                      width: 50,
-                      height: 50,
+                      width: 60,
+                      height: 30,
                       borderRadius: 20,
                       alignItems: "center",
-                      justifyContent: "center",
+                      justifyContent: "space-evenly",
                       backgroundColor: hot ? '#006466' : '#312244',
-                      marginLeft: 10
+                      marginLeft: 10,
+                      flexDirection: 'row'
                     }}
                   >
-                    <Icon name={'hotjar'} size={25} color='#fff' />
-                    <Text style={{ color: "#fff", fontSize: 12, fontFamily: 'Poppins' }}>Hot</Text>
+                    <Icon name={'hotjar'} size={20} color='#fff' />
+                    <Text style={{ color: "#fff", fontSize: 12, fontFamily: 'Poppins', marginTop: 2 }}>Hot</Text>
                   </View>
                 </TouchableOpacity>
               </View>

@@ -3,12 +3,13 @@ import { View, Text, ScrollView, StyleSheet, Image, ActivityIndicator } from 're
 import service from 'src/libs/service/service'
 
 
-export default function mySell() {
+export default function Buys({ navigation }) {
 
-  const [sell, setSell] = useState([])
+  const [items, setItems] = useState([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    navigation.setOptions({ title: 'Compras' })
     makeRequest()
   }, [])
 
@@ -16,10 +17,11 @@ export default function mySell() {
     setLoading(true)
     service.get('sales/buys/')
       .then(res => {
-        setSell(res)
+        setItems(res)
       })
       .catch(err => {
-
+        alert('Error al cargar las compras')
+        console.log(err)
       })
     setLoading(false)
   }
@@ -32,11 +34,20 @@ export default function mySell() {
           loading
             ? <ActivityIndicator color="#000" size="large" style={{ marginTop: 30 }} />
             : <>
-              {sell.map(item => <View key={item.name + item.price}>
-                <Image source={{ uri: item.image }} style={styles.imagenes} />
-                <Text style={styles.description}>{item.name}</Text>
-                <Text style={styles.description2}>{item.price}</Text>
-              </View>)}
+              {
+                items.length > 0
+                  ? <>
+                    {
+                      items.map(item => <View key={item.product.name + item.product.price}>
+                        <Image source={{ uri: item.product.image }} style={styles.imagenes} />
+                        <Text style={styles.description}>{item.product.name}</Text>
+                        <Text style={styles.description}>$ {item.product.price.toFixed(2)}</Text>
+                        <Text style={styles.description2}>Ref: {item.reference}</Text>
+                      </View>)
+                    }
+                  </>
+                  : <Text>Aun no tienes compras</Text>
+              }
             </>
         }
       </View>
@@ -47,7 +58,6 @@ export default function mySell() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
     alignItems: 'center',
     paddingBottom: 30
   },
@@ -59,17 +69,17 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 10,
   },
   description: {
-    backgroundColor: '#444',
+    backgroundColor: '#212F45',
     color: 'white',
-    fontWeight: "bold",
+    fontFamily: 'Poppins',
     paddingTop: 5,
     paddingLeft: 10,
     paddingBottom: 5,
   },
   description2: {
-    backgroundColor: '#444',
+    backgroundColor: '#212F45',
     color: 'white',
-    fontWeight: "bold",
+    fontFamily: 'Poppins',
     paddingTop: 5,
     paddingLeft: 10,
     paddingBottom: 5,

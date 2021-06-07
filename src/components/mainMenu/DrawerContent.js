@@ -78,7 +78,7 @@ export default function DrawerContent({ navigation, ...props }) {
               </View>
             </View>
 
-            <View style={styles.row}>
+            {/* <View style={styles.row}>
               <View style={styles.section}>
                 <Paragraph style={[styles.paragraph, styles.caption]}>0</Paragraph>
                 <Caption style={styles.caption}>Publicaciones</Caption>
@@ -87,7 +87,7 @@ export default function DrawerContent({ navigation, ...props }) {
                 <Paragraph style={[styles.paragraph, styles.caption]}>35</Paragraph>
                 <Caption style={styles.caption}>Ventas</Caption>
               </View>
-            </View>
+            </View> */}
           </View>
           <Drawer.Section style={styles.drawerSection}>
             <DrawerItem
@@ -147,8 +147,8 @@ export default function DrawerContent({ navigation, ...props }) {
                 />
               )}
               label="Mis Ventas"
-              onPress={() => { navigation.navigate('Shell') }}
-            />     
+              onPress={() => { navigation.navigate('Sell') }}
+            />
 
             <DrawerItem
               icon={({ color, size }) => (
@@ -160,7 +160,7 @@ export default function DrawerContent({ navigation, ...props }) {
               )}
               label="Mis Compras"
               onPress={() => { navigation.navigate('Buy') }}
-            />            
+            />
 
             <Dialog.Container visible={visible}>
               <Dialog.Title>Subscripción</Dialog.Title>

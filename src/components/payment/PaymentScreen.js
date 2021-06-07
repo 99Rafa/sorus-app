@@ -17,6 +17,7 @@ export default function PaymentScreen({ route, navigation }) {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    navigation.setOptions({ title: "Pago" })
     const { id, name, price, type } = route.params
     setProductId(id)
     setJavaScript(`

@@ -11,7 +11,7 @@ import { Picker } from '@react-native-picker/picker';
 import service from 'src/libs/service/service';
 import CheckBox from '@react-native-community/checkbox';
 
-export default function RegisterProduct() {
+export default function RegisterProduct({ navigation }) {
   const [toggleCheckBox, setToggleCheckBox] = useState(false)
   const [image, setImage] = useState('empty');
   const [date, setDate] = useState(new Date());
@@ -75,6 +75,7 @@ export default function RegisterProduct() {
   }
 
   useEffect(() => {
+    navigation.setOptions({ title: 'Registrar Producto' });
     (async () => {
       if (Platform.OS !== 'web') {
         const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -204,7 +205,7 @@ export default function RegisterProduct() {
           </View>
           {/* Is Offer  */}
           <View style={[styles.input_2, { top: 0, marginTop: -10 }]}>
-            <Text style={{ marginRight: 10 }}>¿Es venta?</Text>
+            <Text style={{ marginRight: 10 }}>¿Es oferta?</Text>
             <CheckBox
               disabled={false}
               value={toggleCheckBox}

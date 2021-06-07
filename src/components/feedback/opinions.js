@@ -6,7 +6,7 @@ import { faStar } from "@fortawesome/free-solid-svg-icons";
 import service from 'src/libs/service/service';
 
 const Item = ({ item }) => (
-  <View style={styles.item}>
+  <View style={styles.item} key={item.title + item.comment}>
     <Text style={styles.title}>{item.title}</Text>
     <Text style={{ fontFamily: 'Poppins' }}>{item.comment}</Text>
   </View>
@@ -62,8 +62,8 @@ export default function opinions({ navigation, route }) {
             items.length > 0
               ? <FlatList
                 data={items}
-                renderItem={({ item }) => <Item key={item.title + item.comment} item={item} />}
-                keyExtractor={item => item.id}
+                renderItem={({ item }) => <Item item={item} />}
+                keyExtractor={item => item.title + item.comment}
               />
               : <Text style={{ alignSelf: 'center', marginTop: 20 }}>Este producto aun no tiene comentarios</Text>
           }
