@@ -1,76 +1,97 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, SafeAreaView, ActivityIndicator } from 'react-native'
+import { StyleSheet, SafeAreaView, ActivityIndicator, Text, TouchableOpacity, View } from 'react-native'
 import Animated from 'react-native-reanimated'
 import Header from 'src/components/mainMenu/Header'
 import ProductItem from 'src/components/mainMenu/ProductItem';
 import Pagination from 'src/components/mainMenu/Pagination'
 import service from 'src/libs/service/service'
 import Categories from "src/components/mainMenu/Categories";
+import Icon from 'react-native-vector-icons/FontAwesome5'
 
-export default function Body({navigation}) {
+export default function Body({ navigation }) {
 
   const [_scroll_y,] = useState(new Animated.Value(0));
   const [products, setProducts] = useState([])
+  const [productsTop, setProductsTop] = useState([])
   const [loading, setLoading] = useState(true)
   const [currentPage, setCurrentPage] = useState(1)
   const [response, setResponse] = useState({})
-  const [query, setQuery] = useState('')
   const [trigger, setTrigger] = useState(true)
+  const [category, setCategory] = useState()
+  const [query, setQuery] = useState('')
+  const [hot, setHot] = useState(false)
 
   useEffect(() => {
     handleSearch()
-  }, [query])
+    makeRequestTop()
+  }, [query, category, hot])
 
   useEffect(() => {
-    timer()
+    let b = false;
+    const interval = setInterval(() => {
+      b = !b;
+      setTrigger(b)
+    }, 1000);
+    return () => {
+      clearInterval(interval)
+    }
   }, [])
 
-  const timer = (b) => {
-    setTrigger(!b)
-    setTimeout(() => timer(!b), 1000);
+  const listUrl = 'offers/product/list/'
+
+  const handleSearch = () => {
+    let url = listUrl + '?';
+    if (hot) {
+      url += `hot=1&`
+    }
+    if (category) {
+      url += `category=${category}&`
+    }
+    if (query) {
+      url += `query=${query}`
+    }
+    setCurrentPage(1)
+    makeRequest(url)
   }
 
-  const handleSearch = async () => {
+  const changePage = (params, i) => {
+    const url = listUrl + params
+    setCurrentPage(currentPage + i)
+    makeRequest(url)
+  }
+
+  const makeRequest = async url => {
     setLoading(true)
-    let offers = {}
-    if (query === "") {
-      offers = await service.get('offers/product/list/')
-    } else {
-      offers = await service.post('offers/product/query/', query)
-    }
-    if (!offers.error) {
-      setResponse(offers)
-      setProducts(offers.results)
-      setLoading(false)
-      setCurrentPage(1)
-    } else {
-      alert('Error al cargar ofertas')
-    }
+    await service.get(url)
+      .then(response => {
+        setResponse(response);
+        setProducts(response.results);
+      })
+      .catch(error => {
+        alert("Error al cargar las ofertas");
+        console.log(error);
+      });
     setLoading(false)
   }
 
-  const changePage = async i => {
+  const makeRequestTop = async () => {
     setLoading(true)
-    let offers = {}
-    if (query === "") {
-      offers = await service.get(`offers/product/list/?page=${currentPage + i}`)
-    } else {
-      offers = await service.post(`offers/product/query/?page=${currentPage + i}`, query)
-    }
-    if (!offers.error) {
-      setCurrentPage(currentPage + i)
-      setResponse(offers)
-      setProducts(offers.results)
-      setLoading(false)
-    } else {
-      alert('Error when loading offers')
-    }
+    await service.get('offers/product/list_top/')
+      .then(response => {
+        setProductsTop(response);
+      })
+      .catch(error => {
+        alert("Error al cargar las ofertas");
+        console.log(error);
+      });
     setLoading(false)
   }
 
   const handlePress = item => {
     navigation.navigate("ProductView", item)
   }
+
+  const [selected, setSelected] = useState(false)
 
   return (
     <SafeAreaView style={styles.safe_area_view}>
@@ -82,11 +103,39 @@ export default function Body({navigation}) {
         scrollEventThrottle={5}
         onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: _scroll_y } } }])}
       >
-        <Categories />
+        <Categories category={category} setCategory={setCategory} />
         {
           loading
             ? <ActivityIndicator color="#000" size="large" style={{ marginTop: 30 }} />
             : <>
+              {
+                productsTop.length > 0
+                  ? <>
+                    <Text style={styles.titles}>Top</Text>
+                    {productsTop.map((item) => <ProductItem item={item} key={item.name + item.price} handlePress={handlePress} trigger={trigger} />)}
+                  </>
+                  : null
+              }
+              <View style={styles.top}>
+                <Text style={styles.titles}>Generales</Text>
+                <TouchableOpacity onPress={() => setHot(!hot)}>
+                  <View
+                    style={{
+                      width: 60,
+                      height: 30,
+                      borderRadius: 20,
+                      alignItems: "center",
+                      justifyContent: "space-evenly",
+                      backgroundColor: hot ? '#006466' : '#312244',
+                      marginLeft: 10,
+                      flexDirection: 'row'
+                    }}
+                  >
+                    <Icon name={'hotjar'} size={20} color='#fff' />
+                    <Text style={{ color: "#fff", fontSize: 12, fontFamily: 'Poppins', marginTop: 2 }}>Hot</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
               {products.map((item) => <ProductItem item={item} key={item.name + item.price} handlePress={handlePress} trigger={trigger} />)}
 
               <Pagination response={response} changePage={changePage} currentPage={currentPage} />
@@ -116,5 +165,17 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: '100%',
     height: '100%'
+  },
+  titles: {
+    paddingLeft: 20,
+    fontSize: 18,
+    fontFamily: 'PoppinsBold',
+    color: '#312244'
+  },
+  top: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
   }
 });

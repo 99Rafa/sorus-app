@@ -1,16 +1,18 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, Image, TextInput } from 'react-native'
 import { Picker } from '@react-native-picker/picker';
 import * as ImagePicker from 'expo-image-picker';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { updateOfer } from 'src/libs/service/registerProducts/updateOferService';
-import { getInfoOfer } from 'src/libs/service/registerProducts/getInfoOferService';
+import { updateProduct } from 'src/libs/service/registerProducts/updateOfferService';
+import { getInfoOffer } from 'src/libs/service/registerProducts/getInfoOfferService';
 import * as FileSystem from 'expo-file-system';
+import CheckBox from '@react-native-community/checkbox';
 
 
-export default function updateOfert({ navigation }) {
-    const [selectedItem, setSelectedItem] = useState({});
+export default function updateOffer({ navigation }) {
+    const [selectedItem,] = useState({});
+    const [category, setCategory] = useState({});
     const [offers, setOffers] = useState([])
     const [date, setDate] = useState(new Date());
     const [mode, setMode] = useState('date');
@@ -21,7 +23,8 @@ export default function updateOfert({ navigation }) {
     const [description, setDescription] = useState("");
     const [price, setPrice] = useState("");
     const [changeImg, setChangeImg] = useState(false);
-
+    const [stock, setStock] = useState("");
+    const [isOffer, setIsOffer] = useState(false)
 
     useEffect(() => {
         GetInfoOfer();
@@ -37,20 +40,28 @@ export default function updateOfert({ navigation }) {
     }, []);
 
     const Update = async () => {
-        if(changeImg){
-            let image64 = await FileSystem.readAsStringAsync(image, { encoding: 'base64' });
-            setImage (`data:image/png;base64,${image64}`)
-        }        
+        if (category.id === undefined) {
+            alert('Selecciona una categoria')
+            return
+        }
+        let image64 = "";
+        if (changeImg) {
+            image64 = await FileSystem.readAsStringAsync(image, { encoding: 'base64' });
+            image64 = `data:image/png;base64,${image64}`;
+        }
         const data = {
             name,
             description,
             price,
-            image,
+            stock,
+            is_offer: isOffer,
+            image: changeImg ? image64 : image,
             end_date: date,
-            id: id
+            id: id,
+            category: category.id
         }
 
-        const response = await updateOfer(data);
+        const response = await updateProduct(data);
         if (response !== 'Error') {
             alert('Se han actualizado los datos');
         } else {
@@ -59,17 +70,16 @@ export default function updateOfert({ navigation }) {
     }
 
     const GetInfoOfer = async () => {
-        const response = await getInfoOfer();
+        const response = await getInfoOffer();
         if (response !== 'Error') {
             setOffers(response);
-            console.log('Se ha obtenido la información');
         } else {
             console.log('No se pudo obtener los datos');
         }
     }
 
     const BackButtonClick = () => {
-        navigation.navigate("Menu");
+        navigation.navigate("Home");
     }
 
     const onChange = (event, selectedDate) => {
@@ -112,13 +122,59 @@ export default function updateOfert({ navigation }) {
         setDate(new Date(item.end_date));
         setPrice(item.price.toString())
         setId(item.id.toString());
+        compareIdCategory(item.category);
+        setStock(item.stock.toString());
+        setIsOffer(item.is_offer);
     }
+
+    const compareIdCategory = (item) => {
+        for (let c of categories) {
+            if (c.id == item) {
+                setCategory(c)
+            }
+        }
+    }
+
+    const categories = [
+        {
+            name: 'Selecciona una categoria',
+            id: undefined
+        },
+        {
+            name: 'Electronica',
+            id: '1'
+        },
+        {
+            name: 'Celulares',
+            id: '2'
+        },
+        {
+            name: 'Moda',
+            id: '3'
+        },
+        {
+            name: 'Supermercado',
+            id: '4'
+        },
+        {
+            name: 'Accesorios',
+            id: '5'
+        },
+        {
+            name: 'Herramientas',
+            id: '6'
+        },
+        {
+            name: 'Juguetes',
+            id: '7'
+        },
+    ];
 
     return (
         <View style={{ flex: 1, flexDirection: 'column', position: 'relative' }}>
             <View style={styles.contentMain}>
                 <TouchableOpacity onPress={BackButtonClick} style={{ top: 30 }} >
-                    <Icon name='chevron-left' size={45}></Icon>
+                    <Icon name='chevron-left' size={45} color="#fff" ></Icon>
                 </TouchableOpacity>
             </View>
             <View style={styles.circle}>
@@ -130,7 +186,7 @@ export default function updateOfert({ navigation }) {
             </View>
             <View style={styles.cont_1}>
                 <Picker style={styles.style_picker}
-                    selectedValue={selectedItem}                    
+                    selectedValue={selectedItem}
                     onValueChange={setInfo}>
                     {offers.map(item => <Picker.Item value={item} label={item.name} key={item.name + item.price} />)}
                 </Picker>
@@ -193,7 +249,36 @@ export default function updateOfert({ navigation }) {
                             </TextInput>
                         </View>
                     </View>
-
+                    <View style={styles.form}>
+                        <Text style={styles.textoPrincipal}>Stock</Text>
+                        <View style={styles.input}>
+                            <TextInput
+                                value={stock}
+                                onChangeText={setStock}
+                                placeholder=''
+                                keyboardType="number-pad"
+                                placeholderTextColor="#868686"
+                                style={{ marginLeft: 10, width: 250 }}>
+                            </TextInput>
+                        </View>
+                    </View>
+                    <View style={styles.form_2}>
+                        <Text style={styles.textoPrincipal}>¿Es oferta?</Text>
+                        <CheckBox
+                            disabled={false}
+                            value={isOffer}
+                            onCheckColor='#4D194D'
+                            onValueChange={(newValue) => setIsOffer(newValue)}
+                        />
+                    </View>
+                    <View style={styles.form}>
+                        <Text style={styles.textoPrincipal}>Categoria</Text>
+                        <Picker style={styles.style_picker2}
+                            selectedValue={category}
+                            onValueChange={setCategory}>
+                            {categories.map(item => <Picker.Item value={item} label={item.name} key={item.id + item.name} />)}
+                        </Picker>
+                    </View>
                     <TouchableOpacity style={styles.button} onPress={Update}>
                         <Text style={{ color: '#fff' }}>Guardar</Text>
                     </TouchableOpacity>
@@ -221,7 +306,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     cont_2: {
-        flex: 2.4,
+        flex: 2.8,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -232,6 +317,11 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#000',
         color: '#fff'
+    },
+    style_picker2: {
+        height: 40,
+        width: 300,
+        color: '#868686'
     },
     circle: {
         position: 'absolute',
@@ -271,13 +361,19 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0, 0, 0, 0.09)'
     },
     form: {
-        marginTop: 20
+        marginTop: 3
+    },
+    form_2: {
+        marginTop: 3,
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
     },
     button: {
         width: 300,
         height: 40,
         backgroundColor: '#4D194D',
-        marginTop: 30,
+        marginTop: 5,
         borderRadius: 20,
         shadowOpacity: 0.41,
         shadowRadius: 9.11,
@@ -325,9 +421,9 @@ const styles = StyleSheet.create({
         display: 'flex',
         alignItems: 'flex-start',
         flexDirection: 'row',
-        paddingTop: 5,
+        padding: 5,
         width: 300,
-        height: 80,
+        height: 60,
         borderRadius: 20,
         backgroundColor: 'rgba(0, 0, 0, 0.09)'
     },

@@ -4,20 +4,24 @@ import {
   StyleSheet,
   Text,
   View,
-  Image,
   TextInput,
-  Button,
   TouchableOpacity,
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome5";
-// import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import service from 'src/libs/service/service'
 
-export default function Register({navigation}) {
-  const [userName,setuserName]= useState("");
-  const [name,setName]= useState("");
-  const [lastname,setlastName]= useState("");
+export default function Register({ navigation }) {
+  const [userName, setuserName] = useState("");
+  const [name, setName] = useState("");
+  const [lastname, setlastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [errortext, setErrortext] = useState('');
+  const [
+    isRegistrationSuccess,
+    setIsRegistrationSuccess
+  ] = useState(false);
 
 
 
@@ -31,40 +35,85 @@ export default function Register({navigation}) {
     navigation.navigate("Login");
   }
 
+  const handleSubmitButton = () => {
+    setErrortext('');
+    if (!userName) {
+      alert('Introduzca un nombre de usuario');
+      return;
+    }
+    if (!password) {
+      alert('Introduzca una contraseña');
+      return;
+    }
+    if (!name) {
+      alert('Introduzca un nombre');
+      return;
+    }
+    if (!lastname) {
+      alert('Introduzca un apellido');
+      return;
+    }
+    if (!email) {
+      alert('Introduzca un correo electronico');
+      return;
+    }
+
+    setLoading(true);
+    var data = {
+      username: userName,
+      password: password,
+      first_name: name,
+      last_name: lastname,
+      email: email,
+    };
+
+    service.post('users/register/create/', data)
+      .then(() => {
+        setLoading(false);
+        alert('Usuario registrado exitosamente');
+        navigation.navigate("Login")
+      })
+      .catch(error => {
+        setLoading(false);
+        console.log(error)
+        alert('Error al registrar usuario');
+      });
+  };
+
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={{top: 40,marginRight: 300}} onPress={BackButtonClick}>
-        <Icon name='chevron-left' size={25} ></Icon>
+      <TouchableOpacity style={{ top: 40, marginRight: 300 }} onPress={BackButtonClick}>
+        <Icon name='chevron-left' size={25} color='#fff'></Icon>
       </TouchableOpacity>
 
       <Text style={styles.header}>Registro</Text>
       <Text style={styles.title}>Nombre de usuario</Text>
-        <View style={styles.form}>
-              <TextInput style={styles.textinput} placeholder="Nombre de usuario" value={userName} onChangeText={(userName) => setuserName(userName)} />
-        </View>
+      <View style={styles.form}>
+        <TextInput style={styles.textinput} placeholder="Nombre de usuario" value={userName} onChangeText={(userName) => setuserName(userName)} />
+      </View>
       <Text style={styles.title}>Nombre(s)</Text>
-        <View style={styles.form}>
-            <TextInput style={styles.textinput} placeholder="Nombre(s)" value={name} onChangeText={(name) => setName(name)} />
-        </View>
+      <View style={styles.form}>
+        <TextInput style={styles.textinput} placeholder="Nombre(s)" value={name} onChangeText={(name) => setName(name)} />
+      </View>
       <Text style={styles.title}>Apellido(s)</Text>
-        <View style={styles.form}>
-            <TextInput style={styles.textinput} placeholder="Apellido(s)" value={lastname} onChangeText={(lastname) => setlastName(lastname)} />
-      </View>    
+      <View style={styles.form}>
+        <TextInput style={styles.textinput} placeholder="Apellido(s)" value={lastname} onChangeText={(lastname) => setlastName(lastname)} />
+      </View>
       <Text style={styles.title}>Correo electrónico</Text>
       <View style={styles.form}>
-            <TextInput style={styles.textinput} placeholder="Correo electrónico" value={email} onChangeText={(email) => setEmail(email)} />
+        <TextInput style={styles.textinput} placeholder="Correo electrónico" value={email} onChangeText={(email) => setEmail(email)} />
       </View>
       <Text style={styles.title}>Contraseña</Text>
       <View style={styles.form}>
         {/* <View> */}
-          <TextInput style={styles.textinput} autoCompleteType="password" placeholder="Contraseña" autoCorrect={false} secureTextEntry={hidePass ? true : false} value={password} onChangeText={(password) => setPassword(password)}/>
-          <TouchableOpacity style={styles.icon} onPress={() => setHidePass(!hidePass)}>
-            <Icon name={hidePass ? "eye-slash" : "eye"} size={20} color="grey" />
-          </TouchableOpacity>
+        <TextInput style={styles.textinput} autoCompleteType="password" placeholder="Contraseña" autoCorrect={false} secureTextEntry={hidePass ? true : false} value={password} onChangeText={(password) => setPassword(password)} />
+        <TouchableOpacity style={styles.icon} onPress={() => setHidePass(!hidePass)}>
+          <Icon name={hidePass ? "eye-slash" : "eye"} size={20} color="grey" />
+        </TouchableOpacity>
         {/* </View> */}
       </View>
 
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={handleSubmitButton}>
         <Text style={styles.btntext} >Registrarse</Text>
       </TouchableOpacity>
 
@@ -79,11 +128,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   header: {
-    alignSelf:"flex-start",
+    alignSelf: "flex-start",
     fontSize: 24,
     color: "#fff",
     top: 50,
-    marginLeft:40,
+    marginLeft: 40,
     paddingBottom: 10,
     marginBottom: 10,
     borderBottomColor: "#fff",
@@ -95,7 +144,7 @@ const styles = StyleSheet.create({
     top: 50,
     color: "#fff",
   },
-  form:{
+  form: {
     justifyContent: "center",
     top: 50
   },

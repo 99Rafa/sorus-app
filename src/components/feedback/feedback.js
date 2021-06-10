@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   TextInput,
   View,
@@ -7,36 +7,35 @@ import {
   TouchableOpacity
 } from 'react-native'
 import Stars from "src/components/feedback/star";
+import service from 'src/libs/service/service';
 
-export default function ReviewScreen() {
+export default function ReviewScreen({ route, navigation }) {
 
+  const [item, setItem] = useState({});
   const [title, setTitle] = useState("");
   const [comment, setComment] = useState("");
   const [rate, setRate] = useState(0);
 
-  const sendComment = () => {
-    const data = {
-      title,
-      comment,
-      rate,
-      product: 1,
-      user: 1
-    }
+  useEffect(() => {
+    setItem(route.params);
+    navigation.setOptions({ title: 'Comentario' })
+  }, [])
 
-    fetch('http://10.0.2.2:8000/offers/review/create/', {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
+  const sendComment = () => {
+    service.post('offers/review/create/', {
+      product: item.id,
+      rate: rate,
+      title: title,
+      comment: comment
     })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error()
-        }
-        alert('Review guardado');
+      .then(() => {
+        alert('Gracias por tu comentario');
+        navigation.goBack();
       })
-      .catch(_ => alert('Hubo un error al guardar la review'));
+      .catch(err => {
+        alert('Error al guardar el comentario');
+        console.log(err);
+      })
   }
 
   return (
@@ -66,7 +65,7 @@ export default function ReviewScreen() {
         style={styles.button}
         onPress={sendComment}
       >
-        <Text>Guardar comentario</Text>
+        <Text style={{ color: '#fff' }}>Guardar comentario</Text>
       </TouchableOpacity>
     </View>
   )
@@ -92,13 +91,17 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top'
   },
   button: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 10,
-    backgroundColor: 'gray',
-    width: '90%',
+    width: 300,
     height: 40,
+    backgroundColor: '#4D194D',
+    marginTop: 20,
+    borderRadius: 20,
+    shadowOpacity: 0.41,
+    shadowRadius: 9.11,
+    elevation: 14,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   ratingContainer: {
     alignSelf: "flex-start",

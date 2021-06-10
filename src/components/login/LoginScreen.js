@@ -50,7 +50,7 @@ export default function Login({ navigation }) {
       <Text style={styles.text}>SORUS</Text>
 
       {/* InputEmail */}
-      <Text style={styles.textE}>Correo electrónico</Text>
+      <Text style={styles.textE}>Nombre de usuario</Text>
       <View style={styles.inputViewEmail}>
         <TextInput
           value={email}

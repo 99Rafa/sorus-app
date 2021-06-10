@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   StyleSheet,
   View,
@@ -7,60 +7,27 @@ import {
   Text,
 } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome5'
+import service from 'src/libs/service/service'
 
-export default function Categories() {
+export default function Categories({ category, setCategory }) {
 
-  const [categoryData, setCategoryData] = useState([
-    {
-      id: 1,
-      name: "Electronicos",
-      icon: "bell"
-    },
-    {
-      id: 2,
-      name: "Supermercado",
-      icon: "bell"
-    },
-    {
-      id: 3,
-      name: "Moda",
-      icon: "bell"
-    }
-  ])
+  const [categoryData, setCategoryData] = useState([])
 
-  const renderItem = ({ item }) => {
-    return (
-      <TouchableOpacity
-        style={[
-          styles.carrusel
-        ]}
-      //llamar
-      // onPress={() => onSelectCategory(item)}
-      >
-        <View
-          style={{
-            width: 50,
-            height: 50,
-            borderRadius: 25,
-            alignItems: "center",
-            justifyContent: "center",
-            backgroundColor: '#666'  //(selectedCategory?.id == item.id) ? COLORS.white : COLORS.lightGray
-          }}
-        >
-          <Icon name={item.icon} size={25} />
-        </View>
+  useEffect(() => {
+    getCategories();
+  }, [])
 
-        <Text
-          style={{
-            //marginTop: SIZES.padding,
-            color: "coral"//(selectedCategory?.id == item.id) ? COLORS.white : COLORS.black,
-          }}
-        >
-          {item.name}
-        </Text>
-      </TouchableOpacity>
-    )
+  const getCategories = () => {
+    service.get('offers/product/categories/')
+      .then(response => {
+        setCategoryData(response)
+      })
+      .catch(error => {
+        alert('Error al cargar las categorias')
+        console.log(error)
+      });
   }
+
 
   return (
     <View style={styles.carrusel}>
@@ -69,10 +36,64 @@ export default function Categories() {
         horizontal
         showsHorizontalScrollIndicator={false}
         keyExtractor={item => `${item.id}`}
-        renderItem={renderItem}
+        renderItem={({ item }) => <RenderItem
+          item={item}
+          category={category}
+          setCategory={setCategory}
+        />}
         contentContainerStyle={styles.fake_post}
       />
     </View>
+  )
+}
+
+function RenderItem({ item, category, setCategory }) {
+
+  const [selected, setSelected] = useState(false)
+
+  useEffect(() => {
+    if (category === item.id) {
+      setSelected(true)
+    } else {
+      setSelected(false)
+    }
+  }, [category])
+
+  const selectCategory = () => {
+    if (selected) {
+      setSelected(false)
+      setCategory('')
+    } else {
+      setSelected(true)
+      setCategory(item.id)
+    }
+  }
+
+  return (
+    <TouchableOpacity style={[styles.carrusel]} onPress={selectCategory} >
+      <View
+        style={{
+          width: 50,
+          height: 50,
+          borderRadius: 20,
+          alignItems: "center",
+          justifyContent: "center",
+          backgroundColor: selected ? '#006466' : '#312244'
+        }}
+      >
+        <Icon name={item.icon_name} size={25} color='#fff' />
+      </View>
+
+      <Text
+        style={{
+          color: "#272640",
+          fontSize: 12,
+          fontFamily: 'Poppins'
+        }}
+      >
+        {item.name}
+      </Text>
+    </TouchableOpacity>
   )
 }
 
@@ -83,9 +104,14 @@ const styles = StyleSheet.create({
     borderWidth: 0,
   },
   carrusel: {
-    backgroundColor: '#B1B1B1',
     flex: 1,
     width: '100%',
     borderRadius: 8,
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingTop: 5,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
   },
 })

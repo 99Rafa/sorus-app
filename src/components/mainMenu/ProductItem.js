@@ -5,11 +5,16 @@ import secsToTime from "src/libs/time/secsToTime";
 export default function ProductItem({ item, handlePress, trigger }) {
 
   const [timeLeft, setTimeLeft] = useState({})
+  const [price, setPrice] = useState(0)
 
   useEffect(() => {
     item.time_left -= 1
     setTimeLeft(secsToTime(item.time_left))
   }, [trigger])
+
+  useEffect(() => {
+    setPrice(item.price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'))
+  }, [])
 
   return (
     <TouchableOpacity
@@ -17,15 +22,16 @@ export default function ProductItem({ item, handlePress, trigger }) {
       onPress={() => handlePress(item)}
     >
       <>
-        <View>
-          <Text>{item.name}</Text>
-          <Text>{item.price}</Text>
-          <Text>{timeLeft.days}:{timeLeft.hours}:{timeLeft.minutes}:{timeLeft.seconds}</Text>
-        </View>
         <Image
           source={{ uri: item.image }}
-          style={{ width: 80, height: 80, marginLeft: 'auto', borderRadius: 8 }}
+          style={{ width: 80, height: 80, borderRadius: 8 }}
         />
+        <View style={{ marginLeft: 20 }}>
+          <Text style={{ fontFamily: 'PoppinsBold', fontSize: 14 }}>{item.name}</Text>
+          <Text style={{ fontFamily: 'PoppinsBold', color: '#006466', fontSize: 17 }}>$ {price}</Text>
+          <Text style={{ fontFamily: 'PoppinsBold', color: '#272640', fontSize: 17 }}>{timeLeft.days}:{timeLeft.hours}:{timeLeft.minutes}:{timeLeft.seconds}</Text>
+        </View>
+
       </>
     </TouchableOpacity>
   )

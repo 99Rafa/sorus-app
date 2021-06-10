@@ -3,12 +3,18 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 
 export default function Pagination({ response, changePage, currentPage }) {
+
+  const getParams = (url, i) => {
+    const params = url.match(/\?.*/)
+    changePage(params ? params[0] : '', i)
+  }
+
   return (
     <View style={styles.paginator_container}>
       <TouchableOpacity
         style={styles.button}
         disabled={response.previous ? false : true}
-        onPress={() => changePage(-1)}
+        onPress={() => getParams(response.previous, -1)}
       >
         <Icon name="chevron-left" size={25} color={response.previous ? "#000" : "#0000"} />
       </TouchableOpacity>
@@ -18,7 +24,7 @@ export default function Pagination({ response, changePage, currentPage }) {
       <TouchableOpacity
         style={styles.button}
         disabled={response.next ? false : true}
-        onPress={() => changePage(1)}
+        onPress={() => getParams(response.next, 1)}
       >
         <Icon name="chevron-right" size={25} color={response.next ? "#000" : "#0000"} />
       </TouchableOpacity>

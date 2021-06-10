@@ -4,48 +4,59 @@ import { Avatar, Title, Caption, Paragraph, Drawer } from 'react-native-paper';
 import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Icons from "react-native-vector-icons/FontAwesome5";
 import service from 'src/libs/service/service';
-import { getInfoUser } from 'src/libs/service/profile/getInfoUser';
+import userData from 'src/libs/user/userData';
+import Dialog from "react-native-dialog";
 
 export default function DrawerContent({ navigation, ...props }) {
-  const [first_name, setFirst_name] = useState("");
-  const [email, setEmail] = useState("");
-  const [last_name, setLast_name] = useState("");
-  const [image, setImage] = useState("src/assets/sorus.png")
-
-  const logout = () => {
-    service.post('users/logout/')
-      .then(async _ => {
-        await AsyncStorage.clear()
-        navigation.navigate("Login")
-      })
-      .catch(err => {
-        alert('Error al iniciar sesión')
-        console.log(err)
-      })
-  }
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     GetInfoUser();
   }, []);
 
-  GetInfoUser = async () => {
-    const response = await getInfoUser();
-    const data = response.data;
-    if (response !== 'Error') {
-      await AsyncStorage.setItem('username', data.username);
-      await AsyncStorage.setItem('first_name', data.first_name);
-      setFirst_name(data.first_name)
-      await AsyncStorage.setItem('last_name', data.last_name);
-      setLast_name(data.last_name)
-      await AsyncStorage.setItem('email', data.email);
-      setEmail(data.email)
-      await AsyncStorage.setItem('profile_image', data.profile_image);
-      setImage(data.profile_image);
-      console.log('Se ha obtenido la información');
-    } else {
-      console.log('No se pudo obtener los datos');
+  GetInfoUser = () => {
+    service.get('users/profile/info/')
+      .then(response => {
+        userData.setValues(response.data)
+      })
+      .catch(error => {
+        console.log('No se pudieron cargar los datos del usuario')
+        console.log(error)
+      })
+  }
+
+  const showDialog = () => {
+    setVisible(true);
+  };
+
+  const handleCancel = () => {
+    setVisible(false);
+  };
+
+  const handlePay = () => {
+    const data = {
+      id: 2,
+      type: 'subscription',
+      name: "subscription",
+      price: 100
     }
+    navigation.navigate('Payment', data)
+    setVisible(false);
+  };
+
+  const logout = () => {
+    service.post('users/logout/')
+      .then(async () => {
+        await AsyncStorage.clear()
+        navigation.pop()
+        navigation.navigate('Login')
+      })
+      .catch(err => {
+        alert('Error al iniciar sesión')
+        console.log(err)
+      })
   }
 
   return (
@@ -56,27 +67,27 @@ export default function DrawerContent({ navigation, ...props }) {
             <View style={{ flexDirection: 'row', marginTop: 15 }}>
               <Avatar.Image
                 source={{
-                  uri: image
+                  uri: userData.profile_image ? userData.profile_image : '#000'
                 }}
                 size={60}
               />
               <View style={{ marginLeft: 15, flexDirection: 'column' }}>
-                <Title style={styles.title}>{first_name} {last_name}
+                <Title style={styles.title}>{userData.first_name} {userData.last_name}
                 </Title>
-                <Caption style={styles.caption}>{email}</Caption>
+                <Caption style={styles.caption}>{userData.email}</Caption>
               </View>
             </View>
 
-            <View style={styles.row}>
+            {/* <View style={styles.row}>
               <View style={styles.section}>
                 <Paragraph style={[styles.paragraph, styles.caption]}>0</Paragraph>
-                <Caption style={styles.caption}>Publications</Caption>
+                <Caption style={styles.caption}>Publicaciones</Caption>
               </View>
               <View style={styles.section}>
                 <Paragraph style={[styles.paragraph, styles.caption]}>35</Paragraph>
-                <Caption style={styles.caption}>Following</Caption>
+                <Caption style={styles.caption}>Ventas</Caption>
               </View>
-            </View>
+            </View> */}
           </View>
           <Drawer.Section style={styles.drawerSection}>
             <DrawerItem
@@ -88,7 +99,7 @@ export default function DrawerContent({ navigation, ...props }) {
                 />
               )}
               label="Menu"
-              onPress={() => { }}
+              onPress={() => { navigation.navigate("Home") }}
             />
 
             <DrawerItem
@@ -112,7 +123,7 @@ export default function DrawerContent({ navigation, ...props }) {
                 />
               )}
               label="Mis Ofertas"
-              onPress={() => { navigation.navigate("UpdateOfert") }}
+              onPress={() => { navigation.navigate("UpdateOffer") }}
             />
 
             <DrawerItem
@@ -130,13 +141,50 @@ export default function DrawerContent({ navigation, ...props }) {
             <DrawerItem
               icon={({ color, size }) => (
                 <Icon
+                  name="clipboard-check-outline"
+                  color={color}
+                  size={size}
+                />
+              )}
+              label="Mis Ventas"
+              onPress={() => { navigation.navigate('Sell') }}
+            />
+
+            <DrawerItem
+              icon={({ color, size }) => (
+                <Icon
+                  name="shopping-outline"
+                  color={color}
+                  size={size}
+                />
+              )}
+              label="Mis Compras"
+              onPress={() => { navigation.navigate('Buy') }}
+            />
+
+            <Dialog.Container visible={visible}>
+              <Dialog.Title>Subscripción</Dialog.Title>
+              <Dialog.Description>
+                <Icons name='paypal' size={50} />
+                {' Se hara un cobro de $100 por PayPal\n'}
+                {'la cual incluye lo siguiente: \n\n'}
+                <Icons name='check-circle' size={15} />{' Subida ilimitada de promociones \n'}
+                <Icons name='check-circle' size={15} />{' Aparacer en el Top de Ofertas'}
+              </Dialog.Description>
+              <Dialog.Button label="Cancelar" onPress={handleCancel} />
+              <Dialog.Button label="Pagar" onPress={handlePay} />
+            </Dialog.Container>
+
+            <DrawerItem
+              icon={({ color, size }) => (
+                <Icon
                   name="account-check-outline"
                   color={color}
                   size={size}
                 />
               )}
-              label="Support"
-              onPress={() => { }}
+              label="Subscripción"
+              onPress={showDialog}
             />
           </Drawer.Section>
 
@@ -167,13 +215,14 @@ const styles = StyleSheet.create({
     paddingLeft: 16,
   },
   title: {
-    fontSize: 16,
+    fontSize: 15,
     marginTop: 3,
-    fontWeight: 'bold',
+    fontFamily: 'PoppinsBold'
   },
   caption: {
-    fontSize: 14,
+    fontSize: 12.5,
     lineHeight: 14,
+    fontFamily: 'Poppins'
   },
   row: {
     marginTop: 20,
